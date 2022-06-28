@@ -42,7 +42,6 @@ get_dependencies() {
     printf "%s\n" ""
     printf "%s\n" " -> Beginning Dependency Download: "
     printf "%s\n" ""
-    sleep 1
 
     #min_version is not used here
     while IFS='=' read -r dependency min_version
@@ -105,7 +104,6 @@ check_dependencies() {
     printf "%s\n" ""
     printf "%s\n" " -> Beginning Dependency Version Check: "
     printf "%s\n" ""
-    sleep 1
 
     while IFS='=' read -r dependency min_version
     do
@@ -141,7 +139,6 @@ set_defaults() {
     printf "%s\n" ""
     printf "%s\n" " -> Beginning Update Alternatives: "
     printf "%s\n" ""
-    sleep 1
 
     while IFS='=' read -r alternative location
     do
@@ -163,8 +160,6 @@ set_defaults() {
 
 
 }
-
-
 
 if [[ $UID != 0 ]]; then
     printf "%s\n" "Please run this script with sudo:"

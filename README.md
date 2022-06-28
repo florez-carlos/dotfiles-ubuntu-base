@@ -13,7 +13,7 @@ apt-get install git make -y
 ### Install required dependencies on the host machine
 
 ```bash
-sudo make install -e USER=$USER -e HOME=$HOME
+make install
 ```
 
 ### Build the image

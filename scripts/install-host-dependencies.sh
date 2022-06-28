@@ -22,7 +22,7 @@ update() {
 }
 
 get_dependencies() {
-    dependencies_file="${DOT_HOME_CONFIG}/host-dependencies.txt"
+    dependencies_file="${TMP_CONFIG}/host-dependencies.txt"
     all_dependencies_count=0
     dependencies_failures_count=0
     
@@ -87,7 +87,7 @@ get_dependencies() {
 
 check_dependencies() {
     
-    dependencies_file="${DOT_HOME_CONFIG}/host-dependencies.txt"
+    dependencies_file="${TMP_CONFIG}/host-dependencies.txt"
     
     printf "%s\n" ""
     printf "%s\n" " -> Beginning Dependency Version Check: "
@@ -121,40 +121,6 @@ check_dependencies() {
 }
 
 
-copy_fonts() {
-
-	printf "%s\n" ""
-	printf "%s\n" " -> Beginning Font Install: "
-	printf "%s\n" ""
-	sleep 1
-	mkdir -p ${HOME}/.local/share/fonts
-	cp ${MODULE_HOME}/lib/powerlevel10k-media/'MesloLGS NF Bold Italic.ttf' ${HOME}/.local/share/fonts/
-	cp ${MODULE_HOME}/lib/powerlevel10k-media/'MesloLGS NF Bold.ttf' ${HOME}/.local/share/fonts/
-	cp ${MODULE_HOME}/lib/powerlevel10k-media/'MesloLGS NF Italic.ttf' ${HOME}/.local/share/fonts/
-	cp ${MODULE_HOME}/lib/powerlevel10k-media/'MesloLGS NF Regular.ttf' ${HOME}/.local/share/fonts/
-	chown -R ${USER}:${USER} ${HOME}/.local/share/fonts
-	fc-cache -f -v
-
-}
-
-install_docker() {
-
-
-	mkdir -p /etc/apt/keyrings
-	curl -fsSL https://download.docker.com/linux/ubuntu/gpg |sudo -H gpg --dearmor -o /etc/apt/keyrings/docker.gpg
-	echo \ "deb [arch=$(dpkg --print-architecture) \
-	signed-by=/etc/apt/keyrings/docker.gpg] \
-	https://download.docker.com/linux/ubuntu \
-  	$(lsb_release -cs) stable" | tee /etc/apt/sources.list.d/docker.list > /dev/null
-	apt-get update -y
-	apt-get install docker-ce docker-ce-cli containerd.io docker-compose-plugin -y
-	docker run hello-world
-	#groupadd docker
-	adduser ${USER} docker
-
-}
-
-
 if [[ $UID != 0 ]]; then
     printf "%s\n" "${color_red}ERROR:${color_normal}Please run this script with sudo"
     exit 1
@@ -163,8 +129,6 @@ fi
 update
 get_dependencies
 check_dependencies
-copy_fonts
-install_docker
 printf "%s\n" ""
 printf "%s\n" "${color_green}SUCCESS${color_normal}: Installation complete!"
 printf "%s\n" ""

@@ -8,13 +8,13 @@ install:
 	@$(INSTALL_HOST_DEPENDENCIES)
 
 build:
-	@docker -t dev-env-ubuntu-base-img .
+	@docker build --no-cache -t dev-env-ubuntu-base-img .
 
 run:
-	docker run -it --rm --name dev-env-cont -d -v $$(dirname $$SSH_AUTH_SOCK):$$(dirname $$SSH_AUTH_SOCK) dev-env-img
+	docker run -it --rm --name dev-env-ubuntu-base-cont -d dev-env-ubuntu-base-img
 
 exec:
-	docker exec -it dev-env-cont /usr/bin/zsh
+	docker exec -it dev-env-ubuntu-base-cont /usr/bin/zsh
 
 trash:
-	docker container stop dev-env-cont
+	docker container stop dev-env-ubuntu-base-cont
