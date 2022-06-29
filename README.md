@@ -1,6 +1,11 @@
-# Dotfiles
+# Dotfiles Ubuntu Base
 
-Dotfiles contains and updated configuration for the vim editor
+Base Ubuntu image with the necessary system dependencies to create a containerized 
+dev environment.
+
+This is the first step in creating a containerized dev environment, if you do
+not need to modify the base dependencies then proceed with this repo: 
+[Dotfiles](https://gtihub.com/florez-carlos/dotfiles) 
 
 ## Installation
 
