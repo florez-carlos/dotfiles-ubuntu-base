@@ -161,6 +161,28 @@ set_defaults() {
 
 }
 
+get_src_dependencies() {
+	
+	printf "%s\n" ""
+	printf "%s\n" " -> Beginning src dependencies download: "
+	printf "%s\n" ""
+	curl -L -o /tmp/jdtls.tar.gz https://download.eclipse.org/jdtls/milestones/1.9.0/jdt-language-server-1.9.0-202203031534.tar.gz
+
+	curl -L -o /tmp/maven.tar.gz https://dlcdn.apache.org/maven/maven-3/3.8.6/binaries/apache-maven-3.8.6-bin.tar.gz
+
+}
+
+get_npm_dependencies() {
+
+
+	printf "%s\n" ""
+	printf "%s\n" " -> Beginning NPM dependencies download: "
+	printf "%s\n" ""
+	npm i -g pyright typescript typescript-language-server
+
+}
+
+
 if [[ $UID != 0 ]]; then
     printf "%s\n" "Please run this script with sudo:"
     printf "%s\n" "sudo $0"
@@ -172,6 +194,8 @@ add_ppa
 get_dependencies
 check_dependencies
 set_defaults
+get_src_dependencies
+get_npm_dependencies
 printf "%s\n" ""
 printf "%s\n" "${color_green}SUCCESS${color_normal}: Installation complete!"
 printf "%s\n" ""
