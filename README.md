@@ -16,7 +16,7 @@ This is required to pull the repo and invoke the Makefile targets
 ```bash
 apt-get update -y
 apt-get upgrade -y
-apt-get install git make -y
+apt-get install git make curl gpg -y
 ```
 
 ### Define the Personal Authentication Token and login to the registry
@@ -25,6 +25,26 @@ apt-get install git make -y
 export GIT_PAT={GITHUB_PERSONAL_AUTHENTICATION_TOKEN}
 echo $GIT_PAT | docker login ghcr.io -u {OWNER} --password-stdin
 ```
+
+
+### Install required host dependencies
+
+#### WSL2
+
+
+
+#### Ubuntu
+
+This will install Docker and add the user to the docker group
+
+```bash
+make install USER=${USER}
+```
+
+Before proceeding, log out and log back in, 
+
+
+
 
 ### Build the image
 
