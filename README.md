@@ -7,13 +7,20 @@ This is the first step in creating a containerized dev environment, if you do
 not need to modify the base dependencies then proceed with this repo: 
 [Dotfiles](https://gtihub.com/florez-carlos/dotfiles) 
 
+The following installation instructions support:
 
-
+- Ubuntu
+- WSL2 - Ubuntu distro
 
 ## Table of Contents
 
 * [Export Required Env Variables](#export-required-env-variables)
 * [Install Required Dependencies on Host Machine](#install-required-dependencies-on-host-machine)
+* [Install Docker](#install-docker)
+  * [Ubuntu](#ubuntu)
+  * [WSL2 - Ubuntu distro](#wsl2---ubuntu-distro)
+* [Login to the Github Container Registry](login-to-the-github-container-registkry)  
+
 
 ## Export Required Env Variables
 
@@ -28,7 +35,7 @@ export OWNER=${GITHUB_OWNER}
 export DOCKER_TAG_VERSION_NUMBER=${DOCKER_TAG_VERSION_NUMBER}
 ```
 
-## Install required dependencies on host machine
+## Install Required Dependencies on Host Machine
 
 This is required to pull the repo and invoke the Makefile targets
 
@@ -40,7 +47,7 @@ apt-get install git make curl gpg -y
 
 ## Install docker
 
-If using WSL2, skip the ubuntu section and continue with the [WSL2 - ubuntu distro instructions](#wsl2---ubuntu-distro)
+If using WSL2, skip this and continue with the [WSL2 - ubuntu distro instructions](#wsl2---ubuntu-distro)
 
 ### Ubuntu
 
