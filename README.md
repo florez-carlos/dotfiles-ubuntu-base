@@ -9,7 +9,7 @@ not need to modify the base dependencies then proceed with this repo:
 
 ## Installation
 
-### Intall required dependencies on host machine
+### Install required dependencies on host machine
 
 This is required to pull the repo and invoke the Makefile targets
 
@@ -30,6 +30,8 @@ export DOCKER_TAG_VERSION_NUMBER=${DOCKER_TAG_VERSION}
 
 ### Define the Personal Authentication Token environment variable and login to the Github container registry
 
+This is required to push the image to the Github Container Registry
+
 ```bash
 export GIT_PAT={GITHUB_PERSONAL_AUTHENTICATION_TOKEN}
 echo $GIT_PAT | docker login ghcr.io -u $OWNER --password-stdin
@@ -37,7 +39,7 @@ echo $GIT_PAT | docker login ghcr.io -u $OWNER --password-stdin
 
 ### Install docker
 
-If using WSL2, skip the ubuntu section and continue with the [WSL2 - ubuntu distro instructions](#### WSL2 - ubuntu distro)
+If using WSL2, skip the ubuntu section and continue with the [WSL2 - ubuntu distro instructions](#wsl2---ubuntu-distro)
 
 #### Ubuntu
 
