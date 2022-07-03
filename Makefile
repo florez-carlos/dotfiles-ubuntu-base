@@ -10,14 +10,12 @@ install:
 
 build:
 	@docker build --no-cache \
-		-t ghcr.io/$(owner)/dev-env-ubuntu-base-img:$(version) .
+		-t ghcr.io/$(OWNER)/dev-env-ubuntu-base-img:$(DOCKER_TAG_VERSION_NUMBER) .
 run:
-	docker run -it --rm --name dev-env-ubuntu-base-cont -d ghcr.io/$(owner)/dev-env-ubuntu-base-img:$(version)
+	docker run -it --rm --name dev-env-ubuntu-base-cont -d ghcr.io/$(OWNER)/dev-env-ubuntu-base-img:$(DOCKER_TAG_VERSION_NUMBER)
 
 exec:
 	docker exec -it dev-env-ubuntu-base-cont /usr/bin/zsh
 
 trash:
 	docker container stop dev-env-ubuntu-base-cont
-test:
-	@echo $(USER)

@@ -19,44 +19,49 @@ apt-get upgrade -y
 apt-get install git make curl gpg -y
 ```
 
-### Define the Personal Authentication Token and login to the registry
+### Define OWNER and VERSION environment variables
+
+These will be used to tag the Docker image
+
+```bash
+export OWNER=${GITHUB_OWNER}
+export DOCKER_TAG_VERSION_NUMBER=${DOCKER_TAG_VERSION}
+```
+
+### Define the Personal Authentication Token environment variable and login to the Github container registry
 
 ```bash
 export GIT_PAT={GITHUB_PERSONAL_AUTHENTICATION_TOKEN}
-echo $GIT_PAT | docker login ghcr.io -u {OWNER} --password-stdin
+echo $GIT_PAT | docker login ghcr.io -u $OWNER --password-stdin
 ```
 
+### Install docker
 
-### Install required host dependencies
-
-#### WSL2
-
-
+If using WSL2, skip the ubuntu section and continue with the [WSL2 - ubuntu distro instructions](#### WSL2 - ubuntu distro)
 
 #### Ubuntu
 
 This will install Docker and add the user to the docker group
 
 ```bash
-make install USER=${USER}
+make install
 ```
 
-Before proceeding, log out and log back in, 
+Before proceeding, log out and log back in for the group change to take effect.
 
+#### WSL2 - ubuntu distro
 
+Follow these instructions to install [Docker Desktop](https://docs.docker.com/desktop/windows/install/)
 
 
 ### Build the image
 
-Invoke the build target and pass the version and owner variables to it,
-the version number will correspond to the docker tag version number and
-owner the Github owner
-e.g  ghcr.io/florez-carlos/dev-env-ubuntu-base-img:1.0.0
+Invoke the build target
 
 This build will take a while, be patient :)
 
 ```bash
-make build version={DOCKER_TAG_VERSION_NUMBER} owner={OWNER}
+make build
 ```
 
 ### Push the image to the registry
@@ -71,7 +76,7 @@ docker push ghcr.io/{OWNER}/dev-env-ubuntu-base-img:{DOCKER_TAG_VERSION_NUMBER}
 If you need to run and exec the image for any reason then invoke the following
 
 ```bash
-make run version={DOCKER_TAG_VERSION_NUMBER} owner={OWNER}
+make run
 make exec
 ```
 
