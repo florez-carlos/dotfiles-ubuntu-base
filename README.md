@@ -19,7 +19,9 @@ The following installation instructions support:
 * [Install Docker](#install-docker)
   * [Ubuntu](#ubuntu)
   * [WSL2 - Ubuntu distro](#wsl2---ubuntu-distro)
-* [Login to the Github Container Registry](login-to-the-github-container-registkry)  
+* [Login to the Github Container Registry](login-to-the-github-container-registkry)
+* [Build the Image](#build-the-image)
+* [Push the Image to the Registry](#push-the-image-to-the-registry)
 
 
 ## Export Required Env Variables
@@ -76,7 +78,7 @@ This is required to push the image to the Github Container Registry
 echo $GIT_PAT | docker login ghcr.io -u $OWNER --password-stdin
 ```
 
-## Build the image
+## Build the Image
 
 Invoke the build target
 
@@ -86,13 +88,13 @@ This build will take a while, be patient :)
 make build
 ```
 
-## Push the image to the registry
+## Push the Image to the Registry
 
 ```bash
 docker push ghcr.io/{OWNER}/dev-env-ubuntu-base-img:{DOCKER_TAG_VERSION_NUMBER}
 ```
 
-## Optional: running the image
+## Optional: Running the Image
 
 If you need to run and exec the image for any reason then invoke the following
 
