@@ -32,9 +32,9 @@ Where:
 - DOCKER_TAG_VERSION_NUMBER: This is the version number the image is going to be tagged with, increment this number when pushing a new version!
 
 ```bash
-export GIT_PAT={GITHUB_PERSONAL_AUTHENTICATION_TOKEN}
-export OWNER=${GITHUB_OWNER}
-export DOCKER_TAG_VERSION_NUMBER=${DOCKER_TAG_VERSION_NUMBER}
+export GIT_PAT=<GITHUB_PERSONAL_AUTHENTICATION_TOKEN>
+export OWNER=<GITHUB_OWNER>
+export DOCKER_TAG_VERSION_NUMBER=<DOCKER_TAG_VERSION_NUMBER>
 ```
 
 ## Install Required Dependencies on Host Machine
