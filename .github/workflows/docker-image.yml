@@ -3,7 +3,6 @@ name: ci
 on:
   release:
     types: [created]
-	
 env:
   OWNER: ${{ github.actor }}
   TAG: ${{ github.ref_name }}
