@@ -131,36 +131,6 @@ check_dependencies() {
     printf "%s\n" "${color_green}SUCCESS${color_normal}: All dependencies are of appropriate version"
 }
 
-
-set_defaults() {
-    
-    alternatives_file="${TMP_CONFIG}/defaults.txt"
-    
-    printf "%s\n" ""
-    printf "%s\n" " -> Beginning Update Alternatives: "
-    printf "%s\n" ""
-
-    while IFS='=' read -r alternative location
-    do
-        update-alternatives --set $alternative $location
-
-        if [ $? -eq 0 ]
-        then
-            printf "%s\n" "$alternative: ${color_green}SUCCESS${color_normal}"   
-        else
-            printf "%s\n" "$alternative: ${color_red}ERROR${color_normal}"   
-            printf "%s\n" ""
-            printf "%s\n" "${color_red}ERROR${color_normal}: An error occurred with update alternatives for $alternative"   
-            printf "%s\n" ""
-            exit 1
-        fi
-
-    done < "$alternatives_file"
-    
-
-
-}
-
 get_src_dependencies() {
 	
 	printf "%s\n" ""
@@ -193,7 +163,6 @@ update
 add_ppa
 get_dependencies
 check_dependencies
-set_defaults
 get_src_dependencies
 get_npm_dependencies
 printf "%s\n" ""
