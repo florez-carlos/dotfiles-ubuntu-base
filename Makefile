@@ -11,6 +11,11 @@ install:
 build:
 	@docker build --no-cache \
 		-t ghcr.io/$(OWNER)/dev-env-ubuntu-base-img:$(DOCKER_TAG_VERSION_NUMBER) .
+
+# Requires authentication to Github Container Registry, to authenticate reference README
+push:
+	@docker push ghcr.io/$(OWNER)/dev-env-ubuntu-base-img:$(DOCKER_TAG_VERSION_NUMBER)
+
 run:
 	docker run -it --rm --name dev-env-ubuntu-base-cont -d ghcr.io/$(OWNER)/dev-env-ubuntu-base-img:$(DOCKER_TAG_VERSION_NUMBER)
 

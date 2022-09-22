@@ -5,7 +5,7 @@ on:
     types: [created]
 env:
   OWNER: ${{ github.actor }}
-  TAG: ${{ github.ref_name }}
+  DOCKER_TAG_VERSION_NUMBER: ${{ github.ref_name }}
 
 jobs:
   build:
@@ -19,7 +19,6 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
       - run: |
-          docker build --no-cache -t ghcr.io/$OWNER/dev-env-ubuntu-base-img:$TAG .
-          docker push ghcr.io/$OWNER/dev-env-ubuntu-base-img:$TAG
-
-        
+          cd $GITHUB_WORKSPACE
+          make build
+          make push
