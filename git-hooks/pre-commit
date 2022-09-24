@@ -1,0 +1,3 @@
+#!/bin/bash
+shellcheck scripts/install-dependencies.sh
+shellcheck scripts/install-host-dependencies.sh
