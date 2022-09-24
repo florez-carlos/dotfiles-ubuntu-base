@@ -24,8 +24,7 @@ update() {
     sleep 1
     apt-get update -y 
     apt-get upgrade -y 
-    yes Y | unminimize
-    if [ $? -ne 0 ]
+    if yes Y | unminimize
     then
         printf "%s\n" "${color_red}ERROR${color_normal}: An error has occurred updating, halting..."
         exit 1
@@ -51,9 +50,8 @@ get_dependencies() {
         printf "%s" " -> Installing $dependency: "
         
         apt-get install "$dependency" -y &> /dev/null
-        dpkg -s "$dependency" &> /dev/null
         
-        if [ $? -eq 0 ]
+        if dpkg -s "$dependency" &> /dev/null
         then
 
             printf "%s\n" "${color_green}SUCCESS${color_normal}"
@@ -109,9 +107,9 @@ check_dependencies() {
     do
        
         installed_version="$(dpkg -s "$dependency" | grep '^Version:' | cut -d' ' -f2)"     
-        dpkg --compare-versions $installed_version gt $min_version 
+        dpkg --compare-versions "$installed_version" gt "$min_version"
         
-        if [ $? -ne 0 ]
+        if dpkg --compare-versions "$installed_version" gt "$min_version"
         then
             printf "%s\n" "$dependency - $installed_version: ${color_red}FAIL${color_normal}"
             printf "%s\n" ""
