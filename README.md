@@ -14,6 +14,7 @@ The following installation instructions support:
 
 ## Table of Contents
 
+* [Install Git Hooks] (#install-git-hooks)
 * [Export Required Env Variables](#export-required-env-variables)
 * [Install Required Dependencies on Host Machine](#install-required-dependencies-on-host-machine)
 * [Install Docker](#install-docker)
@@ -23,6 +24,11 @@ The following installation instructions support:
 * [Build the Image](#build-the-image)
 * [Push the Image to the Registry](#push-the-image-to-the-registry)
 
+## Install Git Hooks
+
+```bash
+./init-hooks.sh
+```
 
 ## Export Required Env Variables
 
