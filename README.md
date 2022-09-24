@@ -14,7 +14,7 @@ The following installation instructions support:
 
 ## Table of Contents
 
-* [Install Git Hooks] (#install-git-hooks)
+* [Install Git Hooks](#install-git-hooks)
 * [Export Required Env Variables](#export-required-env-variables)
 * [Install Required Dependencies on Host Machine](#install-required-dependencies-on-host-machine)
 * [Install Docker](#install-docker)
