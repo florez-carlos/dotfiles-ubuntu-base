@@ -1,7 +1,7 @@
 FROM ubuntu:focal-20220316
 LABEL org.opencontainers.image.authors="carlos@florez.co.uk"
 
-ARG LOCALTIME=Eastern
+ARG LOCALTIME=Pacific
 
 ENV TMP_SCRIPTS=/tmp/scripts
 ENV TMP_CONFIG=/tmp/config
