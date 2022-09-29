@@ -1,7 +1,7 @@
 # Dotfiles Ubuntu Base
 
 Base Ubuntu image with the necessary system dependencies to create a containerized 
-dev environment.
+development environment.
 
 This is the first step in creating a containerized dev environment, if you do
 not need to modify the base dependencies then proceed with this repo: 
@@ -12,6 +12,9 @@ The following installation instructions support:
 - Ubuntu
 - WSL2 - Ubuntu distro
 
+NOTE: Active development of this repo requires use of the ["Dotfiles"](https://github.com/florez-carlos/dotfiles)
+containerized development environment.
+
 ## Table of Contents
 
 * [Install Git Hooks](#install-git-hooks)
@@ -20,9 +23,11 @@ The following installation instructions support:
 * [Install Docker](#install-docker)
   * [Ubuntu](#ubuntu)
   * [WSL2 - Ubuntu distro](#wsl2---ubuntu-distro)
-* [Login to the Github Container Registry](login-to-the-github-container-registkry)
-* [Build the Image](#build-the-image)
-* [Push the Image to the Registry](#push-the-image-to-the-registry)
+* [Optional: Manually building the image and pushing to Github Container Registry] (#optional:-manually-building-the-image-and-
+pushing-to-github-container-registry)
+  * [Login to the Github Container Registry](login-to-the-github-container-registry)
+  * [Build the Image](#build-the-image)
+  * [Push the Image to the Registry](#push-the-image-to-the-registry)
 
 ## Install Git Hooks
 
@@ -33,12 +38,16 @@ The following installation instructions support:
 ## Export Required Env Variables
 
 Where:
-- GIT_PAT: Github Personal Access Token. For reference on creating a [PAT](https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/creating-a-personal-access-token)
+- (Optional) GIT_PAT: Github Personal Access Token. For reference on creating a [PAT](https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/creating-a-personal-access-token)
 - OWNER: Github username
 - DOCKER_TAG_VERSION_NUMBER: This is the version number the image is going to be tagged with, increment this number when pushing a new version!
 
+Optional: Only required if manually pushing the image to the Github Container Registry
 ```bash
 export GIT_PAT=<GITHUB_PERSONAL_AUTHENTICATION_TOKEN>
+```
+
+```bash
 export OWNER=<GITHUB_OWNER>
 export DOCKER_TAG_VERSION_NUMBER=<DOCKER_TAG_VERSION_NUMBER>
 ```
@@ -75,8 +84,9 @@ Follow these instructions to install [Docker Desktop](https://docs.docker.com/de
 
 ---
 
+## Optional: Manually building the image and pushing to Github Container Registry
 
-## Login to the Github container registry
+### Login to the Github container registry
 
 This is required to push the image to the Github Container Registry
 
@@ -84,7 +94,7 @@ This is required to push the image to the Github Container Registry
 echo $GIT_PAT | docker login ghcr.io -u $OWNER --password-stdin
 ```
 
-## Build the Image
+### Build the Image
 
 Invoke the build target
 
@@ -94,19 +104,18 @@ This build will take a while, be patient :)
 make build
 ```
 
-## Push the Image to the Registry
+### Push the Image to the Registry
 
 ```bash
-docker push ghcr.io/{OWNER}/dev-env-ubuntu-base-img:{DOCKER_TAG_VERSION_NUMBER}
+make push
 ```
 
-## Optional: Running the Image
+### Running the Image
 
 If you need to run and exec the image for any reason then invoke the following
 
 ```bash
-make run
-make exec
+make run && make exec
 ```
 
 ## License
