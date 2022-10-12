@@ -4,7 +4,7 @@ Base Ubuntu image with the necessary system dependencies to create a containeriz
 development environment.
 
 This is the first step in creating a containerized dev environment, if you do
-not need to modify the base dependencies then proceed with this repo: 
+not need to modify the system level dependencies then proceed with this repo: 
 [Dotfiles](https://gtihub.com/florez-carlos/dotfiles) 
 
 The following installation instructions support:
@@ -12,7 +12,7 @@ The following installation instructions support:
 - Ubuntu
 - WSL2 - Ubuntu distro
 
-NOTE: Active development of this repo requires use of the ["Dotfiles"](https://github.com/florez-carlos/dotfiles)
+IMPORTANT: Active development of this repo requires use of the [Dotfiles](https://github.com/florez-carlos/dotfiles)
 containerized development environment.
 
 ## Table of Contents
@@ -23,8 +23,7 @@ containerized development environment.
 * [Install Docker](#install-docker)
   * [Ubuntu](#ubuntu)
   * [WSL2 - Ubuntu distro](#wsl2---ubuntu-distro)
-* [Optional: Manually building the image and pushing to Github Container Registry] (#optional:-manually-building-the-image-and-
-pushing-to-github-container-registry)
+* [Optional - Manually building the image and pushing to Github Container Registry](#optional---manually-building-the-image-and-pushing-to-github-container-registry)
   * [Login to the Github Container Registry](login-to-the-github-container-registry)
   * [Build the Image](#build-the-image)
   * [Push the Image to the Registry](#push-the-image-to-the-registry)
@@ -42,8 +41,8 @@ Where:
 - OWNER: Github username
 - DOCKER_TAG_VERSION_NUMBER: This is the version number the image is going to be tagged with, increment this number when pushing a new version!
 
-Optional: Only required if manually pushing the image to the Github Container Registry
 ```bash
+#Optional: Only required if manually pushing the image to the Github Container Registry
 export GIT_PAT=<GITHUB_PERSONAL_AUTHENTICATION_TOKEN>
 ```
 
@@ -74,9 +73,7 @@ This will install Docker and add the user to the docker group
 make install
 ```
 
-Before proceeding, log out and log back in for the group change to take effect.
-
----
+IMPORTANT: Before proceeding, log out and log back in for the group change to take effect.
 
 ### WSL2 - ubuntu distro
 
@@ -84,7 +81,7 @@ Follow these instructions to install [Docker Desktop](https://docs.docker.com/de
 
 ---
 
-## Optional: Manually building the image and pushing to Github Container Registry
+## Optional - Manually building the image and pushing to Github Container Registry
 
 ### Login to the Github container registry
 
