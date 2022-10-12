@@ -23,7 +23,7 @@ update() {
     sleep 1
     apt-get update -y 
     apt-get upgrade -y 
-    if yes Y | unminimize
+    if ! yes Y | unminimize
     then
         printf "%s\n" "${color_red}ERROR${color_normal}: An error has occurred updating, halting..."
         exit 1
@@ -108,7 +108,7 @@ check_dependencies() {
         installed_version="$(dpkg -s "$dependency" | grep '^Version:' | cut -d' ' -f2)"     
         dpkg --compare-versions "$installed_version" gt "$min_version"
         
-        if dpkg --compare-versions "$installed_version" gt "$min_version"
+        if ! dpkg --compare-versions "$installed_version" gt "$min_version"
         then
             printf "%s\n" "$dependency - $installed_version: ${color_red}FAIL${color_normal}"
             printf "%s\n" ""
