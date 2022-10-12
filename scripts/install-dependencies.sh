@@ -8,10 +8,9 @@ color_normal=$(tput sgr0)
 add_ppa() {
 
     apt-get install software-properties-common curl sudo build-essential -y
-    add-apt-repository ppa:neovim-ppa/unstable
+    add-apt-repository ppa:neovim-ppa/stable
     apt-get update -y
     curl -fsSL https://deb.nodesource.com/setup_lts.x | sudo -E bash -
-
 
 }
 
