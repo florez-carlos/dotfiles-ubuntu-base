@@ -22,3 +22,6 @@ man-db=0
 gpg=2.2.0
 expect=0
 shellcheck=0
+ca-certificates=0
+apt-transport-https=0
+lsb-release=0
