@@ -25,3 +25,5 @@ shellcheck=0
 ca-certificates=0
 apt-transport-https=0
 lsb-release=0
+sudo=0
+build-essential=0
