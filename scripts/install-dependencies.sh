@@ -7,10 +7,21 @@ color_normal=$(tput sgr0)
 
 add_ppa() {
 
+    printf "%s\n" ""
+    printf "%s\n" " -> Beginning Add neovim ppa: "
+    printf "%s\n" ""
+    sleep 1
+
     add-apt-repository ppa:neovim-ppa/stable
-    apt-get update -y
     curl -fsSL https://deb.nodesource.com/setup_lts.x | sudo -E bash -
 
+    printf "%s\n" ""
+    printf "%s\n" " -> Beginning Add nodejs ppa: "
+    printf "%s\n" ""
+    sleep 1
+
+    curl -fsSL https://deb.nodesource.com/setup_lts.x | sudo -E bash -
+    apt-get update -y
 }
 
 update() {
@@ -29,14 +40,14 @@ update() {
     
 }
 
-get_dependencies() {
+get_apt_dependencies() {
     
-    dependencies_file="${TMP_CONFIG}/dependencies.txt"
+    dependencies_file="${TMP_CONFIG}/apt-dependencies.txt"
     all_dependencies_count=0
     dependencies_failures_count=0
     
     printf "%s\n" ""
-    printf "%s\n" " -> Beginning Dependency Download: "
+    printf "%s\n" " -> Beginning APT Dependency Download: "
     printf "%s\n" ""
 
     #min_version is not used here
@@ -92,12 +103,74 @@ get_dependencies() {
  
 }
 
-check_dependencies() {
+get_ppa_dependencies() {
     
-    dependencies_file="${TMP_CONFIG}/dependencies.txt"
+    dependencies_file="${TMP_CONFIG}/ppa-dependencies.txt"
+    all_dependencies_count=0
+    dependencies_failures_count=0
     
     printf "%s\n" ""
-    printf "%s\n" " -> Beginning Dependency Version Check: "
+    printf "%s\n" " -> Beginning PPA Dependency Download: "
+    printf "%s\n" ""
+
+    #min_version is not used here
+    while IFS='=' read -r dependency min_version
+    do
+        
+        ((++all_dependencies_count))
+        printf "%s" " -> Installing $dependency: "
+        
+        apt-get install "$dependency" -y &> /dev/null
+        
+        if dpkg -s "$dependency" &> /dev/null
+        then
+
+            printf "%s\n" "${color_green}SUCCESS${color_normal}"
+
+        else
+
+            ((++dependencies_failures_count))
+            printf "%s\n" "${color_red}FAILED${color_normal}"
+
+        fi
+    done < "$dependencies_file"
+
+
+    if [ $dependencies_failures_count -eq 0 ]
+    then
+        
+        printf "%s\n" ""
+        printf "%s\n" "${color_green}SUCCESS${color_normal}: All dependencies have been installed successfully"
+
+    elif [ $all_dependencies_count -eq 0 ]
+    then
+        
+        printf "%s\n" "${color_yellow}WARNING${color_normal}: No dependencies have been installed"
+        exit 1
+
+    elif  [ $dependencies_failures_count -gt 0 ] && [ $dependencies_failures_count -eq $all_dependencies_count ]
+    then
+        
+        printf "%s\n" "${color_red}ERROR${color_normal}: All dependencies have failed installation!"
+        exit 1
+
+    elif [ $dependencies_failures_count -gt 0 ] && [ $dependencies_failures_count -ne $all_dependencies_count ]
+    then
+
+        printf "%s\n" "${color_yellow}WARNING${color_normal}: Some dependencies have failed installation"
+        exit 1
+
+    fi
+
+    return 1
+ 
+}
+check_dependencies() {
+    
+    dependencies_file="${TMP_CONFIG}/all-dependencies.txt"
+    
+    printf "%s\n" ""
+    printf "%s\n" " -> Beginning All Dependencies Version Check: "
     printf "%s\n" ""
 
     while IFS='=' read -r dependency min_version
@@ -155,8 +228,9 @@ if [[ $UID != 0 ]]; then
 fi
 
 update
+get_apt_dependencies
 add_ppa
-get_dependencies
+get_ppa_dependencies
 check_dependencies
 get_src_dependencies
 get_npm_dependencies
