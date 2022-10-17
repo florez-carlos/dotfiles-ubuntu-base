@@ -5,6 +5,14 @@ color_green=$(tput setaf 2)
 color_yellow=$(tput setaf 3)
 color_normal=$(tput sgr0)
 
+add_ppa() {
+
+    add-apt-repository ppa:neovim-ppa/stable
+    apt-get update -y
+    curl -fsSL https://deb.nodesource.com/setup_lts.x | sudo -E bash -
+
+}
+
 update() {
 
     printf "%s\n" ""
@@ -147,6 +155,7 @@ if [[ $UID != 0 ]]; then
 fi
 
 update
+add_ppa
 get_dependencies
 check_dependencies
 get_src_dependencies
