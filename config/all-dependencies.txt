@@ -13,6 +13,7 @@ build-essential=0
 cmake=3.13
 neovim=0.7.0~ubuntu0
 nodejs=12.0.0
+azure-cli=2.1.0
 python3-dev=0
 mono-complete=0
 golang=0

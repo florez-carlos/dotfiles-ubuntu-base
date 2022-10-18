@@ -11,16 +11,28 @@ add_ppa() {
     printf "%s\n" " -> Beginning Add neovim ppa: "
     printf "%s\n" ""
     sleep 1
-
+    
     add-apt-repository ppa:neovim-ppa/stable
-    curl -fsSL https://deb.nodesource.com/setup_lts.x | sudo -E bash -
 
     printf "%s\n" ""
     printf "%s\n" " -> Beginning Add nodejs ppa: "
     printf "%s\n" ""
     sleep 1
-
+    
     curl -fsSL https://deb.nodesource.com/setup_lts.x | sudo -E bash -
+
+    printf "%s\n" ""
+    printf "%s\n" " -> Beginning Add Azure cli: "
+    printf "%s\n" ""
+    sleep 1
+ 
+    curl -sL https://packages.microsoft.com/keys/microsoft.asc | \
+    gpg --dearmor | \
+    tee /etc/apt/trusted.gpg.d/microsoft.gpg > /dev/null
+
+    AZ_REPO=$(lsb_release -cs)
+    echo "deb [arch=amd64] https://packages.microsoft.com/repos/azure-cli/ $AZ_REPO main" | \
+    tee /etc/apt/sources.list.d/azure-cli.list
     apt-get update -y
 }
 
@@ -204,8 +216,9 @@ get_src_dependencies() {
 	printf "%s\n" ""
 	printf "%s\n" " -> Beginning src dependencies download: "
 	printf "%s\n" ""
+    # jdtls
 	curl -L -o /tmp/jdtls.tar.gz https://download.eclipse.org/jdtls/milestones/1.9.0/jdt-language-server-1.9.0-202203031534.tar.gz
-
+    # maven
 	curl -L -o /tmp/maven.tar.gz https://dlcdn.apache.org/maven/maven-3/3.8.6/binaries/apache-maven-3.8.6-bin.tar.gz
 
 }
