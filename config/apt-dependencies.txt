@@ -27,3 +27,5 @@ lsb-release=0
 sudo=0
 build-essential=0
 jq=0
+wget=0
+apt-file=0

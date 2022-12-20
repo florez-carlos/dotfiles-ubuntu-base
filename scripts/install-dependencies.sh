@@ -13,6 +13,7 @@ add_ppa() {
     sleep 1
     
     add-apt-repository ppa:neovim-ppa/stable
+    apt-get update -y
 
     printf "%s\n" ""
     printf "%s\n" " -> Beginning Add nodejs ppa: "
@@ -33,6 +34,15 @@ add_ppa() {
     AZ_REPO=$(lsb_release -cs)
     echo "deb [arch=amd64] https://packages.microsoft.com/repos/azure-cli/ $AZ_REPO main" | \
     tee /etc/apt/sources.list.d/azure-cli.list
+
+    printf "%s\n" ""
+    printf "%s\n" " -> Beginning Add Mongo shell ppa: "
+    printf "%s\n" ""
+    sleep 1
+    
+    wget -qO - https://www.mongodb.org/static/pgp/server-6.0.asc | apt-key add -
+    echo "deb [ arch=amd64,arm64 ] https://repo.mongodb.org/apt/ubuntu focal/mongodb-org/6.0 multiverse" | tee /etc/apt/sources.list.d/mongodb-org-6.0.list
+    
     apt-get update -y
 }
 
@@ -220,7 +230,8 @@ get_src_dependencies() {
 	curl -L -o /tmp/jdtls.tar.gz https://download.eclipse.org/jdtls/milestones/1.9.0/jdt-language-server-1.9.0-202203031534.tar.gz
     # maven
 	curl -L -o /tmp/maven.tar.gz https://dlcdn.apache.org/maven/maven-3/3.8.6/binaries/apache-maven-3.8.6-bin.tar.gz
-
+    # Lombok
+    curl -L -o /tmp/lombok.jar https://projectlombok.org/downloads/lombok.jar
 }
 
 get_npm_dependencies() {
