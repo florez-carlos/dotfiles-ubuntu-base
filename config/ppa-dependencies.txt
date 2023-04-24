@@ -1,4 +1,3 @@
-neovim=0.7.0~ubuntu0
 nodejs=12.0.0
 azure-cli=2.1.0
 mongodb-mongosh=0

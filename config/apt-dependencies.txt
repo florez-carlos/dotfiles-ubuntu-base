@@ -29,3 +29,6 @@ build-essential=0
 jq=0
 wget=0
 apt-file=0
+ninja-build=0
+gettext=0
+unzip=0
