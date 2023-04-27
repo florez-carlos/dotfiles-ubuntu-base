@@ -57,8 +57,6 @@ update() {
 get_apt_dependencies() {
     
     dependencies_file="${TMP_CONFIG}/apt-dependencies.txt"
-    all_dependencies_count=0
-    dependencies_failures_count=0
     
     printf "%s\n" ""
     printf "%s\n" " -> Beginning APT Dependency Download: "
@@ -68,149 +66,75 @@ get_apt_dependencies() {
     while IFS='=' read -r dependency min_version
     do
         
-        ((++all_dependencies_count))
         printf "%s" " -> Installing $dependency: "
         
-        apt-get install "$dependency" -y &> /dev/null
+        apt-get install "$dependency" -y 
         
-        if dpkg -s "$dependency" &> /dev/null
-        then
-
-            printf "%s\n" "${color_green}SUCCESS${color_normal}"
-
-        else
-
-            ((++dependencies_failures_count))
-            printf "%s\n" "${color_red}FAILED${color_normal}"
-
-        fi
     done < "$dependencies_file"
 
-
-    if [ $dependencies_failures_count -eq 0 ]
-    then
-        
-        printf "%s\n" ""
-        printf "%s\n" "${color_green}SUCCESS${color_normal}: All dependencies have been installed successfully"
-
-    elif [ $all_dependencies_count -eq 0 ]
-    then
-        
-        printf "%s\n" "${color_yellow}WARNING${color_normal}: No dependencies have been installed"
-        exit 1
-
-    elif  [ $dependencies_failures_count -gt 0 ] && [ $dependencies_failures_count -eq $all_dependencies_count ]
-    then
-        
-        printf "%s\n" "${color_red}ERROR${color_normal}: All dependencies have failed installation!"
-        exit 1
-
-    elif [ $dependencies_failures_count -gt 0 ] && [ $dependencies_failures_count -ne $all_dependencies_count ]
-    then
-
-        printf "%s\n" "${color_yellow}WARNING${color_normal}: Some dependencies have failed installation"
-        exit 1
-
-    fi
-
-    return 1
- 
-}
-
-get_ppa_dependencies() {
-    
-    dependencies_file="${TMP_CONFIG}/ppa-dependencies.txt"
-    all_dependencies_count=0
-    dependencies_failures_count=0
-    
     printf "%s\n" ""
-    printf "%s\n" " -> Beginning PPA Dependency Download: "
+    printf "%s\n" " -> Beginning APT Dependency check: "
     printf "%s\n" ""
-
-    #min_version is not used here
     while IFS='=' read -r dependency min_version
     do
-        
-        ((++all_dependencies_count))
-        printf "%s" " -> Installing $dependency: "
-        
-        apt-get install "$dependency" -y &> /dev/null
-        
-        if dpkg -s "$dependency" &> /dev/null
-        then
 
-            printf "%s\n" "${color_green}SUCCESS${color_normal}"
-
-        else
-
-            ((++dependencies_failures_count))
-            printf "%s\n" "${color_red}FAILED${color_normal}"
-
-        fi
-    done < "$dependencies_file"
-
-
-    if [ $dependencies_failures_count -eq 0 ]
-    then
-        
-        printf "%s\n" ""
-        printf "%s\n" "${color_green}SUCCESS${color_normal}: All dependencies have been installed successfully"
-
-    elif [ $all_dependencies_count -eq 0 ]
-    then
-        
-        printf "%s\n" "${color_yellow}WARNING${color_normal}: No dependencies have been installed"
-        exit 1
-
-    elif  [ $dependencies_failures_count -gt 0 ] && [ $dependencies_failures_count -eq $all_dependencies_count ]
-    then
-        
-        printf "%s\n" "${color_red}ERROR${color_normal}: All dependencies have failed installation!"
-        exit 1
-
-    elif [ $dependencies_failures_count -gt 0 ] && [ $dependencies_failures_count -ne $all_dependencies_count ]
-    then
-
-        printf "%s\n" "${color_yellow}WARNING${color_normal}: Some dependencies have failed installation"
-        exit 1
-
-    fi
-
-    return 1
- 
-}
-check_dependencies() {
-    
-    dependencies_file="${TMP_CONFIG}/all-dependencies.txt"
-    
-    printf "%s\n" ""
-    printf "%s\n" " -> Beginning All Dependencies Version Check: "
-    printf "%s\n" ""
-
-    while IFS='=' read -r dependency min_version
-    do
-       
-        installed_version="$(dpkg -s "$dependency" | grep '^Version:' | cut -d' ' -f2)"     
+        installed_version="$(dpkg -s "$dependency" | grep '^Version:' | cut -d' ' -f2)"
         dpkg --compare-versions "$installed_version" gt "$min_version"
-        
+
         if ! dpkg --compare-versions "$installed_version" gt "$min_version"
         then
             printf "%s\n" "$dependency - $installed_version: ${color_red}FAIL${color_normal}"
             printf "%s\n" ""
             printf "%s\n" "${color_red}ERROR${color_normal}: $dependency installed version: $installed_version but minimum required: $min_version"
-            printf "%s\n" "Proceed with manual installation of $dependency - $min_version or larger and rerun this script"
             exit 1;
 
         else
             printf "%s\n" "$dependency - $installed_version: ${color_green}PASS${color_normal}"
             continue
         fi
-
-
     done < "$dependencies_file"
+
+}
+
+get_ppa_dependencies() {
+    
+    dependencies_file="${TMP_CONFIG}/ppa-dependencies.txt"
     
     printf "%s\n" ""
-    printf "%s\n" "${color_green}SUCCESS${color_normal}: All dependencies are of appropriate version"
+    printf "%s\n" " -> Beginning PPA Dependency Download: "
+    printf "%s\n" ""
+
+    while IFS='=' read -r dependency min_version
+    do
+        
+        printf "%s" " -> Installing $dependency: "
+        
+        apt-get install "$dependency" -y 
+        
+    done < "$dependencies_file"
+
+    printf "%s\n" ""
+    printf "%s\n" " -> Beginning PPA Dependency check: "
+    printf "%s\n" ""
+    while IFS='=' read -r dependency min_version
+    do
+
+        installed_version="$(dpkg -s "$dependency" | grep '^Version:' | cut -d' ' -f2)"
+        dpkg --compare-versions "$installed_version" gt "$min_version"
+
+        if ! dpkg --compare-versions "$installed_version" gt "$min_version"
+        then
+            printf "%s\n" "$dependency - $installed_version: ${color_red}FAIL${color_normal}"
+            printf "%s\n" ""
+            printf "%s\n" "${color_red}ERROR${color_normal}: $dependency installed version: $installed_version but minimum required: $min_version"
+            exit 1;
+
+        else
+            printf "%s\n" "$dependency - $installed_version: ${color_green}PASS${color_normal}"
+            continue
+        fi
+    done < "$dependencies_file"
+ 
 }
 
 get_src_dependencies() {
@@ -222,7 +146,7 @@ get_src_dependencies() {
     neovim_branch_version="stable"
 
     jdtls_url="https://download.eclipse.org/jdtls/milestones/1.9.0/jdt-language-server-1.9.0-202203031534.tar.gz"
-    maven_url="https://dlcdn.apache.org/maven/maven-3/3.9.1/binaries/apache-maven-3.9.1-bin.tar.gz"
+    maven_url="https://dlcdn.apache.org/maven/maven-3/${MAVEN_CURRENT_VERSION}/binaries/apache-maven-${MAVEN_CURRENT_VERSION}-bin.tar.gz"
     lombok_url="https://projectlombok.org/downloads/lombok.jar"
     neovim_url="https://github.com/neovim/neovim.git"
     urls=($jdtls_url $maven_url $lombok_url)
@@ -245,25 +169,69 @@ get_src_dependencies() {
     printf "%s\n" ""
 
     # jdtls
-	curl -L -o /tmp/jdtls.tar.gz $jdtls_url 
+    curl -L -o /tmp/jdtls.tar.gz $jdtls_url 
+    tar -xvzf /tmp/jdtls.tar.gz -C $DOT_HOME_LIB/jdtls
+
     # maven
-	curl -L -o /tmp/maven.tar.gz $maven_url
-   	# Lombok
-	curl -L -o /tmp/lombok.jar  $lombok_url
-     	#NeoVim
-	git clone --depth=1 $neovim_url --branch $neovim_branch_version --single-branch /tmp/neovim
-	cd /tmp/neovim
-	make CMAKE_BUILD_TYPE=Release
-       	make install
+    curl -L -o /tmp/maven.tar.gz $maven_url
+    tar -xvzf /tmp/maven.tar.gz -C $DOT_HOME_LIB/maven
+
+    # Lombok
+    curl -L -o /tmp/lombok.jar  $lombok_url
+    cp /tmp/lombok.jar $DOT_HOME_LIB/lombok.jar
+
+
+    #NeoVim
+    git clone --depth=1 $neovim_url --branch $neovim_branch_version --single-branch /tmp/neovim
+    cd /tmp/neovim
+    make CMAKE_BUILD_TYPE=Release
+    make install
+
 }
 
 get_npm_dependencies() {
 
 
-	printf "%s\n" ""
-	printf "%s\n" " -> Beginning NPM dependencies download: "
-	printf "%s\n" ""
-	npm i -g pyright typescript typescript-language-server
+    printf "%s\n" ""
+    printf "%s\n" " -> Beginning NPM dependencies download: "
+    printf "%s\n" ""
+
+    dependencies_file="${TMP_CONFIG}/npm-dependencies.txt"
+    
+    printf "%s\n" ""
+    printf "%s\n" " -> Beginning NPM Dependency Download: "
+    printf "%s\n" ""
+
+    while IFS='=' read -r dependency min_version
+    do
+        
+        printf "%s" " -> Installing $dependency: "
+        
+	npm i -g "$dependency"
+        
+    done < "$dependencies_file"
+
+    printf "%s\n" ""
+    printf "%s\n" " -> Beginning NPM Dependency check: "
+    printf "%s\n" ""
+    while IFS='=' read -r dependency min_version
+    do
+
+	installed_version="$(npm list -g | awk -v var=${dependency} -F@ '$0 ~ var { print $2;exit; }')"
+        dpkg --compare-versions "$installed_version" gt "$min_version"
+
+        if ! dpkg --compare-versions "$installed_version" gt "$min_version"
+        then
+            printf "%s\n" "$dependency - $installed_version: ${color_red}FAIL${color_normal}"
+            printf "%s\n" ""
+            printf "%s\n" "${color_red}ERROR${color_normal}: $dependency installed version: $installed_version but minimum required: $min_version"
+            exit 1;
+
+        else
+            printf "%s\n" "$dependency - $installed_version: ${color_green}PASS${color_normal}"
+            continue
+        fi
+    done < "$dependencies_file"
 
 }
 
@@ -280,7 +248,6 @@ add_ppa
 get_ppa_dependencies
 get_src_dependencies
 get_npm_dependencies
-check_dependencies
 printf "%s\n" ""
 printf "%s\n" "${color_green}SUCCESS${color_normal}: Installation complete!"
 printf "%s\n" ""
