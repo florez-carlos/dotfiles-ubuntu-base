@@ -4,8 +4,7 @@ on:
   release:
     types: [created]
 env:
-  OWNER: ${{ github.actor }}
-  DOCKER_TAG_VERSION_NUMBER: ${{ github.ref_name }}
+  GIT_USER_USERNAME: ${{ github.actor }}
 
 jobs:
   build:
