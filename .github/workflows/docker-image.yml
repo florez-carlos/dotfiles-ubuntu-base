@@ -8,7 +8,7 @@ env:
   GIT_PAT: ${{ secrets.GIT_PAT }}
 
 jobs:
-  build:
+  build-and-push:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
@@ -24,3 +24,20 @@ jobs:
           cd $GITHUB_WORKSPACE
           make build
           make push
+  build-and-push-latest:
+    needs: build-and-push
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          submodules: recursive
+      - name: Login to GitHub Container Registry
+        uses: docker/login-action@v2
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GIT_PAT }}
+      - run: |
+          cd $GITHUB_WORKSPACE
+          make build-latest
+          make push-latest
