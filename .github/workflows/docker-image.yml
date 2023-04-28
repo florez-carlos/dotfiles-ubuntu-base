@@ -5,6 +5,7 @@ on:
     types: [created]
 env:
   GIT_USER_USERNAME: ${{ github.actor }}
+  GIT_PAT: ${{ secrets.GIT_PAT }}
 
 jobs:
   build:
