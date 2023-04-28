@@ -36,13 +36,13 @@ printf "%s\n" ""
 printf "%s\n" " -> Pushing new version: ${IMAGE_VERSION}"
 printf "%s\n" ""
 sleep 1
-docker push ghcr.io/$(GIT_USER_USERNAME)/dev-env-ubuntu-base-img:v${IMAGE_VERSION}
+docker push ghcr.io/${GIT_USER_USERNAME}/dev-env-ubuntu-base-img:v${IMAGE_VERSION}
 
-docker tag ghcr.io/$(GIT_USER_USERNAME)/dev-env-ubuntu-base-img:v${IMAGE_VERSION} ghcr.io/$(GIT_USER_USERNAME)/dev-env-ubuntu-base-img:latest
+docker tag ghcr.io/${GIT_USER_USERNAME}/dev-env-ubuntu-base-img:v${IMAGE_VERSION} ghcr.io/${GIT_USER_USERNAME}/dev-env-ubuntu-base-img:latest
 
 printf "%s\n" ""
 printf "%s\n" " -> Pushing new version named as latest"
 printf "%s\n" ""
 sleep 1
-docker push ghcr.io/$(GIT_USER_USERNAME)/dev-env-ubuntu-base-img:latest
+docker push ghcr.io/${GIT_USER_USERNAME}/dev-env-ubuntu-base-img:latest
 
