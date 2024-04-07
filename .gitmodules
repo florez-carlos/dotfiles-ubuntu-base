@@ -10,6 +10,7 @@
 [submodule "lib/vim-plugins/vim-gitgutter"]
 	path = lib/vim-plugins/vim-gitgutter
 	url = git@github.com:airblade/vim-gitgutter.git
+    branch = main
 [submodule "lib/vim-plugins/nvim-lspconfig"]
 	path = lib/vim-plugins/nvim-lspconfig
 	url = git@github.com:neovim/nvim-lspconfig.git
@@ -25,30 +26,38 @@
 [submodule "lib/vim-plugins/nvim-cmp"]
 	path = lib/vim-plugins/nvim-cmp
 	url = git@github.com:hrsh7th/nvim-cmp.git
+    branch = main
 [submodule "lib/vim-plugins/cmp-nvim-lsp"]
 	path = lib/vim-plugins/cmp-nvim-lsp
 	url = git@github.com:hrsh7th/cmp-nvim-lsp.git
+    branch = main
 [submodule "lib/vim-plugins/gitsigns.nvim"]
 	path = lib/vim-plugins/gitsigns.nvim
 	url = git@github.com:lewis6991/gitsigns.nvim.git
+    branch = main
 [submodule "lib/vim-plugins/plenary.nvim"]
 	path = lib/vim-plugins/plenary.nvim
 	url = git@github.com:nvim-lua/plenary.nvim.git
 [submodule "lib/vim-plugins/cmp-buffer"]
 	path = lib/vim-plugins/cmp-buffer
 	url = git@github.com:hrsh7th/cmp-buffer.git
+    branch = main
 [submodule "lib/vim-plugins/cmp-path"]
 	path = lib/vim-plugins/cmp-path
 	url = git@github.com:hrsh7th/cmp-path.git
+    branch = main
 [submodule "lib/vim-plugins/cmp-cmdline"]
 	path = lib/vim-plugins/cmp-cmdline
 	url = git@github.com:hrsh7th/cmp-cmdline.git
+    branch = main
 [submodule "lib/vim-plugins/friendly-snippets"]
 	path = lib/vim-plugins/friendly-snippets
 	url = git@github.com:rafamadriz/friendly-snippets.git
+    branch = main
 [submodule "lib/vim-plugins/cmp-nvim-lua"]
 	path = lib/vim-plugins/cmp-nvim-lua
 	url = git@github.com:hrsh7th/cmp-nvim-lua.git
+    branch = main
 [submodule "lib/vim-plugins/telescope.nvim"]
 	path = lib/vim-plugins/telescope.nvim
 	url = git@github.com:nvim-telescope/telescope.nvim.git
@@ -67,15 +76,18 @@
 [submodule "lib/vim-plugins/bufferline.nvim"]
 	path = lib/vim-plugins/bufferline.nvim
 	url = git@github.com:akinsho/bufferline.nvim.git
+    branch = main
 [submodule "lib/vim-plugins/vim-bbye"]
 	path = lib/vim-plugins/vim-bbye
 	url = git@github.com:moll/vim-bbye.git
 [submodule "lib/vim-plugins/null-ls.nvim"]
 	path = lib/vim-plugins/null-ls.nvim
 	url = git@github.com:jose-elias-alvarez/null-ls.nvim.git
+    branch = main
 [submodule "lib/vim-plugins/impatient.nvim"]
 	path = lib/vim-plugins/impatient.nvim
 	url = git@github.com:lewis6991/impatient.nvim.git
+    branch = main
 [submodule "lib/vim-plugins/indent-blankline.nvim"]
 	path = lib/vim-plugins/indent-blankline.nvim
 	url = git@github.com:lukas-reineke/indent-blankline.nvim.git
@@ -88,3 +100,4 @@
 [submodule "lib/vim-plugins/vscode.nvim"]
 	path = lib/vim-plugins/vscode.nvim
 	url = git@github.com:Mofiqul/vscode.nvim.git
+    branch = main
