@@ -31,3 +31,5 @@ apt-file=0
 ninja-build=0
 gettext=0
 unzip=0
+locales=0
+xclip=0
