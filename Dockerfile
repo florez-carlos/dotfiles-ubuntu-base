@@ -3,10 +3,16 @@ LABEL org.opencontainers.image.authors="carlos@florez.co.uk"
 
 ARG LOCALTIME=Pacific
 ARG DEBIAN_FRONTEND=noninteractive
-ARG MAVEN_CURRENT_VERSION=3.9.1
+ARG MAVEN_CURRENT_VERSION=3.9.6
 
+# Python is fetched from deadsnakes ppa, see install-dependencies for details
+# WARNING: If version is changed, it must also be changed int config/ppa-dependencies.txt
+ENV PYTHON_VERSION=3.11
 ENV TMP_SCRIPTS=/tmp/scripts
 ENV TMP_CONFIG=/tmp/config
+ENV LANG=en_US.UTF-8
+ENV LANGUAGE=en_US
+ENV LC_ALL=en_US.UTF-8
 ENV TERM=xterm-256color
 ENV LOCALTIME=$LOCALTIME
 ENV MAVEN_CURRENT_VERSION=$MAVEN_CURRENT_VERSION
@@ -28,5 +34,7 @@ ADD ./config $TMP_CONFIG
 RUN chmod +x -R $TMP_SCRIPTS  
 RUN ln -s /usr/share/zoneinfo/US/$LOCALTIME /etc/localtime
 RUN $TMP_SCRIPTS/install-dependencies.sh
-RUN rm -r $TMP_SCRIPTS
-RUN rm -r $TMP_CONFIG
+RUN rm -r $TMP_SCRIPTS $TMP_CONFIG
+RUN locale-gen en_US.UTF-8 && locale-gen en_US
+RUN python${PYTHON_VERSION} -m ensurepip --upgrade
+RUN python${PYTHON_VERSION} -m pip install --upgrade pip setuptools wheel
