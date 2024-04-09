@@ -2,7 +2,7 @@
 
 color_red=$(tput setaf 1)
 color_green=$(tput setaf 2)
-color_yellow=$(tput setaf 3)
+# color_yellow=$(tput setaf 3)
 color_normal=$(tput sgr0)
 
 install_docker() {
@@ -16,7 +16,7 @@ install_docker() {
 	apt-get update -y
 	apt-get install docker-ce docker-ce-cli containerd.io docker-compose-plugin -y
 	docker run hello-world
-	adduser ${USER} docker
+	adduser "${USER}" docker
 
 }
 
