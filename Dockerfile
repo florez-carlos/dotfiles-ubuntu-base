@@ -5,9 +5,8 @@ ARG LOCALTIME=Pacific
 ARG DEBIAN_FRONTEND=noninteractive
 ARG MAVEN_CURRENT_VERSION=3.9.6
 
-# Python is fetched from deadsnakes ppa, see install-dependencies for details
-# WARNING: If version is changed, it must also be changed int config/ppa-dependencies.txt
-ENV PYTHON_VERSION=3.11
+#This is not system python
+ENV PYTHON_GLOBAL_VERSION=3.11
 ENV TMP_SCRIPTS=/tmp/scripts
 ENV TMP_CONFIG=/tmp/config
 ENV LANG=en_US.UTF-8
@@ -36,5 +35,5 @@ RUN ln -s /usr/share/zoneinfo/US/$LOCALTIME /etc/localtime
 RUN $TMP_SCRIPTS/install-dependencies.sh
 RUN rm -r $TMP_SCRIPTS $TMP_CONFIG
 RUN locale-gen en_US.UTF-8 && locale-gen en_US
-RUN python${PYTHON_VERSION} -m ensurepip --upgrade
-RUN python${PYTHON_VERSION} -m pip install --upgrade pip setuptools wheel
+RUN python${PYTHON_GLOBAL_VERSION} -m ensurepip --upgrade
+RUN python${PYTHON_GLOBAL_VERSION} -m pip install --upgrade pip setuptools wheel pynvim
