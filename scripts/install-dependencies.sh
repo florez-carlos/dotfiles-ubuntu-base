@@ -2,7 +2,7 @@
 
 color_red=$(tput setaf 1)
 color_green=$(tput setaf 2)
-color_yellow=$(tput setaf 3)
+# color_yellow=$(tput setaf 3)
 color_normal=$(tput sgr0)
 
 add_ppa() {
@@ -157,11 +157,11 @@ get_src_dependencies() {
     maven_url="https://dlcdn.apache.org/maven/maven-3/${MAVEN_CURRENT_VERSION}/binaries/apache-maven-${MAVEN_CURRENT_VERSION}-bin.tar.gz"
     lombok_url="https://projectlombok.org/downloads/lombok.jar"
     neovim_url="https://github.com/neovim/neovim.git"
-    urls=($jdtls_url $maven_url $lombok_url)
+    urls=("$jdtls_url" "$maven_url" "$lombok_url")
     for url in "${urls[@]}"
     do
-	response="$(curl --head --silent --write-out %{http_code} --output /dev/null $url)"
-	if [ $response -eq 200 ]
+	response="$(curl --head --silent --write-out "%{http_code}" --output /dev/null "$url")";
+	if [ "$response" -eq 200 ]
 	then
 	    printf "%s\n" "${color_green}URL VALID${color_normal}: ${url}"
 	else
@@ -178,20 +178,20 @@ get_src_dependencies() {
 
     # jdtls
     curl -L -o /tmp/jdtls.tar.gz $jdtls_url 
-    tar -xvzf /tmp/jdtls.tar.gz -C $DOT_HOME_LIB/jdtls
+    tar -xvzf /tmp/jdtls.tar.gz -C "$DOT_HOME_LIB"/jdtls
 
     # maven
-    curl -L -o /tmp/maven.tar.gz $maven_url
-    tar -xvzf /tmp/maven.tar.gz -C $DOT_HOME_LIB/maven
+    curl -L -o /tmp/maven.tar.gz "$maven_url"
+    tar -xvzf /tmp/maven.tar.gz -C "$DOT_HOME_LIB"/maven
 
     # Lombok
     curl -L -o /tmp/lombok.jar  $lombok_url
-    cp /tmp/lombok.jar $DOT_HOME_LIB/lombok.jar
+    cp /tmp/lombok.jar "$DOT_HOME_LIB"/lombok.jar
 
 
     #NeoVim
     git clone --depth=1 $neovim_url --branch $neovim_branch_version --single-branch /tmp/neovim
-    cd /tmp/neovim
+    cd /tmp/neovim || { echo "${color_red}ERROR${color_normal}: Could not cd into /tmp/neovim"; exit 1; }
     make CMAKE_BUILD_TYPE=Release
     make install
 
@@ -199,6 +199,13 @@ get_src_dependencies() {
 
 get_npm_dependencies() {
 
+    printf "%s\n" ""
+    printf "%s\n" " -> Beginning NVM download: "
+    printf "%s\n" ""
+    curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.7/install.sh | bash
+    # shellcheck source=/dev/null
+    . "$HOME"/.bashrc
+    nvm install node
 
     printf "%s\n" ""
     printf "%s\n" " -> Beginning NPM dependencies download: "
@@ -225,7 +232,7 @@ get_npm_dependencies() {
     while IFS='=' read -r dependency min_version
     do
 
-	installed_version="$(npm list -g | awk -v var=${dependency} -F@ '$0 ~ var { print $2;exit; }')"
+	installed_version="$(npm list -g | awk -v var="${dependency}" -F@ '$0 ~ var { print $2;exit; }')"
         dpkg --compare-versions "$installed_version" gt "$min_version"
 
         if ! dpkg --compare-versions "$installed_version" gt "$min_version"
