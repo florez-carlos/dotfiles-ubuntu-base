@@ -1,4 +1,0 @@
-pyright=0
-typescript=0
-typescript-language-server=0
-neovim=0
