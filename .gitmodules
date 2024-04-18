@@ -101,9 +101,3 @@
 	path = lib/vim-plugins/vscode.nvim
 	url = git@github.com:Mofiqul/vscode.nvim.git
     branch = main
-[submodule "lib/cpython"]
-	path = lib/cpython
-	url = git@github.com:python/cpython.git
-[submodule "lib/neovim"]
-	path = lib/neovim
-	url = git@github.com:neovim/neovim.git
