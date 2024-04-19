@@ -8,13 +8,6 @@ color_normal=$(tput sgr0)
 add_ppa() {
 
     printf "%s\n" ""
-    printf "%s\n" " -> Beginning Add nodejs ppa: "
-    printf "%s\n" ""
-    sleep 1
-    
-    curl -fsSL https://deb.nodesource.com/setup_lts.x | sudo -E bash -
-
-    printf "%s\n" ""
     printf "%s\n" " -> Beginning Add Azure cli: "
     printf "%s\n" ""
     sleep 1
@@ -32,17 +25,12 @@ add_ppa() {
     printf "%s\n" ""
     sleep 1
     
-    wget -qO - https://www.mongodb.org/static/pgp/server-6.0.asc | apt-key add -
-    echo "deb [ arch=amd64,arm64 ] https://repo.mongodb.org/apt/ubuntu focal/mongodb-org/6.0 multiverse" | tee /etc/apt/sources.list.d/mongodb-org-6.0.list
-
-    printf "%s\n" ""
-    printf "%s\n" " -> Beginning Add Python ppa: "
-    printf "%s\n" ""
-    sleep 1
-
-    add-apt-repository ppa:deadsnakes/ppa
-
+    # wget -qO - https://www.mongodb.org/static/pgp/server-7.0.asc | apt-key add -
+    # echo "deb [ arch=amd64,arm64 ] https://repo.mongodb.org/apt/ubuntu focal/mongodb-org/6.0 multiverse" | tee /etc/apt/sources.list.d/mongodb-org-6.0.list
+    wget -qO- https://www.mongodb.org/static/pgp/server-7.0.asc | tee /etc/apt/trusted.gpg.d/server-7.0.asc
+    echo "deb [ arch=amd64,arm64 ] https://repo.mongodb.org/apt/ubuntu focal/mongodb-org/7.0 multiverse" | tee /etc/apt/sources.list.d/mongodb-org-7.0.list
     
+
     apt-get update -y
 }
 
@@ -152,15 +140,17 @@ get_src_dependencies() {
     printf "%s\n" ""
 
     neovim_branch_version="stable"
+    python_versions=(3.8 3.11)
 
     jdtls_url="https://download.eclipse.org/jdtls/milestones/1.9.0/jdt-language-server-1.9.0-202203031534.tar.gz"
     maven_url="https://dlcdn.apache.org/maven/maven-3/${MAVEN_CURRENT_VERSION}/binaries/apache-maven-${MAVEN_CURRENT_VERSION}-bin.tar.gz"
     lombok_url="https://projectlombok.org/downloads/lombok.jar"
     neovim_url="https://github.com/neovim/neovim.git"
+    python_url="https://github.com/python/cpython.git"
     urls=("$jdtls_url" "$maven_url" "$lombok_url")
     for url in "${urls[@]}"
     do
-	response="$(curl --head --silent --write-out "%{http_code}" --output /dev/null "$url")";
+	response="$(curl --head --silent --location --write-out "%{http_code}" --output /dev/null "$url")";
 	if [ "$response" -eq 200 ]
 	then
 	    printf "%s\n" "${color_green}URL VALID${color_normal}: ${url}"
@@ -175,6 +165,29 @@ get_src_dependencies() {
     printf "%s\n" ""
     printf "%s\n" " -> Beginning src dependencies download: "
     printf "%s\n" ""
+
+
+    for python_version in "${python_versions[@]}"
+    do
+        printf "%s\n" ""
+        printf "%s\n" " -> Beginning python${python_version} install: "
+        printf "%s\n" ""
+        sleep1
+        
+        location="/tmp/python-${python_version}"
+
+        git clone --depth=1 $python_url --branch "$python_version" --single-branch "$location"
+        cd "$location" || { echo "${color_red}ERROR${color_normal}: Could not cd into ${location}"; exit 1; }
+        ./configure
+        make
+        make test
+        make install
+    done
+
+    # Remove symlink from installed python to preserve link to system python /usr/bin/python3
+    rm /usr/local/bin/python3
+
+    git clone --depth=1 $neovim_url --branch $neovim_branch_version --single-branch /tmp/neovim
 
     # jdtls
     curl -L -o /tmp/jdtls.tar.gz $jdtls_url 
@@ -197,56 +210,14 @@ get_src_dependencies() {
 
 }
 
-get_npm_dependencies() {
+set_locale() {
 
     printf "%s\n" ""
-    printf "%s\n" " -> Beginning NVM download: "
-    printf "%s\n" ""
-    curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.7/install.sh | bash
-    # shellcheck source=/dev/null
-    . "$HOME"/.bashrc
-    nvm install node
-
-    printf "%s\n" ""
-    printf "%s\n" " -> Beginning NPM dependencies download: "
+    printf "%s\n" " -> Beginning set locale: "
     printf "%s\n" ""
 
-    dependencies_file="${TMP_CONFIG}/npm-dependencies.txt"
-    
-    printf "%s\n" ""
-    printf "%s\n" " -> Beginning NPM Dependency Download: "
-    printf "%s\n" ""
-
-    while IFS='=' read -r dependency min_version
-    do
-        
-        printf "%s" " -> Installing $dependency: "
-        
-	npm i -g "$dependency"
-        
-    done < "$dependencies_file"
-
-    printf "%s\n" ""
-    printf "%s\n" " -> Beginning NPM Dependency check: "
-    printf "%s\n" ""
-    while IFS='=' read -r dependency min_version
-    do
-
-	installed_version="$(npm list -g | awk -v var="${dependency}" -F@ '$0 ~ var { print $2;exit; }')"
-        dpkg --compare-versions "$installed_version" gt "$min_version"
-
-        if ! dpkg --compare-versions "$installed_version" gt "$min_version"
-        then
-            printf "%s\n" "$dependency - $installed_version: ${color_red}FAIL${color_normal}"
-            printf "%s\n" ""
-            printf "%s\n" "${color_red}ERROR${color_normal}: $dependency installed version: $installed_version but minimum required: $min_version"
-            exit 1;
-
-        else
-            printf "%s\n" "$dependency - $installed_version: ${color_green}PASS${color_normal}"
-            continue
-        fi
-    done < "$dependencies_file"
+    locale-gen en_US.UTF-8
+    locale-gen en_US
 
 }
 
@@ -259,10 +230,10 @@ fi
 
 update
 get_apt_dependencies
+set_locale
 add_ppa
 get_ppa_dependencies
 get_src_dependencies
-get_npm_dependencies
 printf "%s\n" ""
 printf "%s\n" "${color_green}SUCCESS${color_normal}: Installation complete!"
 printf "%s\n" ""
