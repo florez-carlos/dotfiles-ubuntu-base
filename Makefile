@@ -12,8 +12,8 @@ install:
 	@$(INSTALL_HOST_DEPENDENCIES)
 
 build:
-	@docker build --no-cache \
-		-t ghcr.io/$(GIT_USER_USERNAME)/dev-env-ubuntu-base-img:v$$IMAGE_VERSION . --progress plain
+	@DOCKER_BUILDKIT=1 docker build --no-cache --network=host --progress plain \
+	-t ghcr.io/$(GIT_USER_USERNAME)/dev-env-ubuntu-base-img:v$$IMAGE_VERSION .
 
 build-latest:
 	@docker build --no-cache \
