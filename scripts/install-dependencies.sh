@@ -147,7 +147,7 @@ get_src_dependencies() {
     lombok_url="https://projectlombok.org/downloads/lombok.jar"
     neovim_url="https://github.com/neovim/neovim.git"
     python_url="https://github.com/python/cpython.git"
-    urls=("$jdtls_url" "$maven_url" "$lombok_url","$neovim_url","$python_url")
+    urls=("$jdtls_url" "$maven_url" "$lombok_url" "$neovim_url" "$python_url")
     for url in "${urls[@]}"
     do
 	response="$(curl --head --silent --location --write-out "%{http_code}" --output /dev/null "$url")";
