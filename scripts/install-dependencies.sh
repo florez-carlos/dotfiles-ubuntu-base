@@ -147,7 +147,7 @@ get_src_dependencies() {
     lombok_url="https://projectlombok.org/downloads/lombok.jar"
     neovim_url="https://github.com/neovim/neovim.git"
     python_url="https://github.com/python/cpython.git"
-    urls=("$jdtls_url" "$maven_url" "$lombok_url")
+    urls=("$jdtls_url" "$maven_url" "$lombok_url","$neovim_url","$python_url")
     for url in "${urls[@]}"
     do
 	response="$(curl --head --silent --location --write-out "%{http_code}" --output /dev/null "$url")";
@@ -178,10 +178,9 @@ get_src_dependencies() {
 
         git clone --depth=1 $python_url --branch "$python_version" --single-branch "$location"
         cd "$location" || { echo "${color_red}ERROR${color_normal}: Could not cd into ${location}"; exit 1; }
-        ./configure
+        ./configure --enable-optimizations
         make
-        make test
-        make install
+        make altinstall
     done
 
     # Remove symlink from installed python to preserve link to system python /usr/bin/python3
