@@ -1,4 +1,4 @@
-FROM ubuntu:noble-20240423
+FROM ubuntu:jammy-20240416
 LABEL org.opencontainers.image.authors="carlos@florez.co.uk"
 
 ARG LOCALTIME=Pacific
