@@ -5,7 +5,7 @@ development environment.
 
 This is the first step in creating a containerized dev environment, if you do
 not need to modify the system level dependencies then proceed with this repo: 
-[Dotfiles](https://gtihub.com/florez-carlos/dotfiles) 
+[Dotfiles](https://github.com/florez-carlos/dotfiles) 
 
 The following installation instructions support:
 
