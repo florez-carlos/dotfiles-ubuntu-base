@@ -1,3 +1,5 @@
 #!/bin/bash
 shellcheck scripts/install-dependencies.sh
 shellcheck scripts/install-host-dependencies.sh
+shellcheck scripts/gh-container-registry-push.sh
+shellcheck scripts/gh-container-registry-push-latest.sh
