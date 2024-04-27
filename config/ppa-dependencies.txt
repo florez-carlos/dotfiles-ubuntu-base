@@ -1,2 +1,0 @@
-azure-cli=2.1.0
-mongodb-mongosh=0

@@ -50,3 +50,5 @@ lzma-dev=0
 tk-dev=0
 uuid-dev=0
 zlib1g-dev=0
+azure-cli=2.1.0
+mongodb-mongosh=0
