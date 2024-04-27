@@ -5,33 +5,44 @@ color_green=$(tput setaf 2)
 # color_yellow=$(tput setaf 3)
 color_normal=$(tput sgr0)
 
-add_ppa() {
+#Some dependencies require trusted keys
+add_trusted_keys() {
 
     printf "%s\n" ""
-    printf "%s\n" " -> Beginning Add Azure cli: "
+    printf "%s\n" " -> Beginning Add Azure cli trusted key: "
     printf "%s\n" ""
     sleep 1
- 
-    curl -sL https://packages.microsoft.com/keys/microsoft.asc | \
-    gpg --dearmor | \
-    tee /etc/apt/trusted.gpg.d/microsoft.gpg > /dev/null
 
-    AZ_REPO=$(lsb_release -cs)
-    echo "deb [arch=amd64] https://packages.microsoft.com/repos/azure-cli/ $AZ_REPO main" | \
-    tee /etc/apt/sources.list.d/azure-cli.list
+    apt-get install gpg curl wget -y
+
+    arch=$(dpkg --print-architecture)
+    #os_name=$(. /etc/os-release && echo "$ID") 
+    #shellcheck source=/dev/null
+    os_version_codename=$(. /etc/os-release && echo "$VERSION_CODENAME")
+    mkdir -p /etc/apt/keyrings
+    chmod 755 /etc/apt/keyrings
+
+    curl -sLS https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor -o /etc/apt/keyrings/microsoft.gpg
+    # chmod go+r /etc/apt/keyrings/microsoft.gpg
+    wget -qO- https://www.mongodb.org/static/pgp/server-7.0.asc | tee /etc/apt/trusted.gpg.d/server-7.0.asc
+
+    echo "Types: deb
+URIs: https://packages.microsoft.com/repos/azure-cli/
+Suites: ${os_version_codename}
+Components: main
+Architectures: ${arch}
+Signed-by: /etc/apt/keyrings/microsoft.gpg" | \
+    tee /etc/apt/sources.list.d/azure-cli.sources
+
 
     printf "%s\n" ""
-    printf "%s\n" " -> Beginning Add Mongo shell ppa: "
+    printf "%s\n" " -> Beginning Add Mongo shell trusted key: "
     printf "%s\n" ""
     sleep 1
     
-    # wget -qO - https://www.mongodb.org/static/pgp/server-7.0.asc | apt-key add -
-    # echo "deb [ arch=amd64,arm64 ] https://repo.mongodb.org/apt/ubuntu focal/mongodb-org/6.0 multiverse" | tee /etc/apt/sources.list.d/mongodb-org-6.0.list
-    wget -qO- https://www.mongodb.org/static/pgp/server-7.0.asc | tee /etc/apt/trusted.gpg.d/server-7.0.asc
+    # wget -qO- https://www.mongodb.org/static/pgp/server-7.0.asc | tee /etc/apt/trusted.gpg.d/server-7.0.asc
     echo "deb [ arch=amd64,arm64 ] https://repo.mongodb.org/apt/ubuntu focal/mongodb-org/7.0 multiverse" | tee /etc/apt/sources.list.d/mongodb-org-7.0.list
     
-
-    apt-get update -y
 }
 
 update() {
@@ -90,47 +101,6 @@ get_apt_dependencies() {
         fi
     done < "$dependencies_file"
 
-}
-
-get_ppa_dependencies() {
-    
-    dependencies_file="${TMP_CONFIG}/ppa-dependencies.txt"
-    
-    printf "%s\n" ""
-    printf "%s\n" " -> Beginning PPA Dependency Download: "
-    printf "%s\n" ""
-
-    while IFS='=' read -r dependency min_version
-    do
-        
-        printf "%s" " -> Installing $dependency: "
-        
-        apt-get install "$dependency" -y 
-        
-    done < "$dependencies_file"
-
-    printf "%s\n" ""
-    printf "%s\n" " -> Beginning PPA Dependency check: "
-    printf "%s\n" ""
-    while IFS='=' read -r dependency min_version
-    do
-
-        installed_version="$(dpkg -s "$dependency" | grep '^Version:' | cut -d' ' -f2)"
-        dpkg --compare-versions "$installed_version" gt "$min_version"
-
-        if ! dpkg --compare-versions "$installed_version" gt "$min_version"
-        then
-            printf "%s\n" "$dependency - $installed_version: ${color_red}FAIL${color_normal}"
-            printf "%s\n" ""
-            printf "%s\n" "${color_red}ERROR${color_normal}: $dependency installed version: $installed_version but minimum required: $min_version"
-            exit 1;
-
-        else
-            printf "%s\n" "$dependency - $installed_version: ${color_green}PASS${color_normal}"
-            continue
-        fi
-    done < "$dependencies_file"
- 
 }
 
 get_src_dependencies() {
@@ -228,10 +198,10 @@ if [[ $UID != 0 ]]; then
 fi
 
 update
+add_trusted_keys
+update
 get_apt_dependencies
 set_locale
-add_ppa
-get_ppa_dependencies
 get_src_dependencies
 printf "%s\n" ""
 printf "%s\n" "${color_green}SUCCESS${color_normal}: Installation complete!"
