@@ -21,7 +21,6 @@ containerized development environment
 * [Export Required Env Variables](#export-required-env-variables)
 * [Install Required Dependencies on Host Machine](#install-required-dependencies-on-host-machine)
 * [Install Docker](#install-docker)
-  * [Ubuntu](#ubuntu)
 * [Optional - Manually building the image and pushing to Github Container Registry](#optional---manually-building-the-image-and-pushing-to-github-container-registry)
   * [Login to the Github Container Registry](login-to-the-github-container-registry)
   * [Build the Image](#build-the-image)
@@ -61,8 +60,6 @@ apt-get install git make curl gpg -y
 ```
 
 ## Install docker
-
-### Ubuntu
 
 This will install Docker and add the user to the docker group
 
