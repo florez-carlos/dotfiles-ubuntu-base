@@ -1,4 +1,4 @@
-FROM ubuntu:focal-20230412
+FROM ubuntu:noble-20240423
 LABEL org.opencontainers.image.authors="carlos@florez.co.uk"
 
 ARG LOCALTIME=Pacific
