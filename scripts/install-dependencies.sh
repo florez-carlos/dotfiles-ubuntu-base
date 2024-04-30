@@ -110,7 +110,7 @@ get_src_dependencies() {
     printf "%s\n" ""
 
     neovim_branch_version="stable"
-    python_versions=(3.8 3.11)
+    python_versions=(v3.8.2 v3.11.6)
 
     jdtls_url="https://download.eclipse.org/jdtls/milestones/1.9.0/jdt-language-server-1.9.0-202203031534.tar.gz"
     maven_url="https://dlcdn.apache.org/maven/maven-3/${MAVEN_CURRENT_VERSION}/binaries/apache-maven-${MAVEN_CURRENT_VERSION}-bin.tar.gz"

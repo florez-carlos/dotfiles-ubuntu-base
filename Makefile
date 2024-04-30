@@ -3,7 +3,7 @@ SCRIPTS_DIR := $(MODULE_HOME)/scripts
 INSTALL_HOST_DEPENDENCIES := $(SCRIPTS_DIR)/install-host-dependencies.sh
 GH_CONTAINER_REGISTRY_PUSH := $(SCRIPTS_DIR)/gh-container-registry-push.sh
 GH_CONTAINER_REGISTRY_PUSH_LATEST := $(SCRIPTS_DIR)/gh-container-registry-push-latest.sh
-export IMAGE_VERSION := 2.3.0
+export IMAGE_VERSION := 2.3.1
 
 .PHONY: install build push run exec trash
 
