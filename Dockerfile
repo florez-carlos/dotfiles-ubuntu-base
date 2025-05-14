@@ -3,7 +3,7 @@ LABEL org.opencontainers.image.authors="carlos@florez.co.uk"
 
 ARG LOCALTIME=Pacific
 ARG DEBIAN_FRONTEND=noninteractive
-ARG MAVEN_CURRENT_VERSION=3.9.6
+ARG MAVEN_CURRENT_VERSION=3.9.9
 
 ENV TMP_SCRIPTS=/tmp/scripts
 ENV TMP_CONFIG=/tmp/config
