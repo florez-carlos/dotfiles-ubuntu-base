@@ -27,6 +27,7 @@ not need to modify the system level dependencies then proceed with this repo:
   * [Push the remote image to the Registry](#push-the-remote-image-to-the-registry)
 * [Development](#development)
   * [Clone the repo in workspace with recurse submodules](#clone-the-repo-in-workspace-with-recurse-submodules)
+  * [Update submodules](#update-submodules)
   * [Install Git Hooks](#install-git-hooks) 
 
 
@@ -146,7 +147,16 @@ containerized development environment
 ```bash
 cd $HOME/workspace
 git clone --recurse-submodules -j8 git@github.com:florez-carlos/dotfiles-ubuntu-base.git
-cd dotfiles
+cd dotfiles-ubuntu-base
+```
+
+### Update submodules 
+
+Ensure to update the lib submodules before releasing a new update
+
+```bash
+git submodule sync
+git submodule update --remote --merge
 ```
 
 ### Install Git Hooks
