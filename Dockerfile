@@ -1,9 +1,11 @@
-FROM ubuntu:jammy-20240416
+FROM ubuntu:noble-20250910
 LABEL org.opencontainers.image.authors="carlos@florez.co.uk"
 
-ARG LOCALTIME=Pacific
+ARG LOCALTIME=UTC
 ARG DEBIAN_FRONTEND=noninteractive
-ARG MAVEN_CURRENT_VERSION=3.9.9
+ARG MAVEN_CURRENT_VERSION=3.9.11
+ARG JDTLS_CURRENT_VERSION=1.50.0
+ARG JDTLS_CURRENT_BUILD=202509041425
 
 ENV TMP_SCRIPTS=/tmp/scripts
 ENV TMP_CONFIG=/tmp/config
@@ -13,6 +15,8 @@ ENV LC_ALL=en_US.UTF-8
 ENV TERM=xterm-256color
 ENV LOCALTIME=$LOCALTIME
 ENV MAVEN_CURRENT_VERSION=$MAVEN_CURRENT_VERSION
+ENV JDTLS_CURRENT_VERSION=$JDTLS_CURRENT_VERSION
+ENV JDTLS_CURRENT_BUILD=$JDTLS_CURRENT_BUILD
 ENV DOT_HOME=/usr/local/src/dotfiles
 ENV DOT_HOME_SCRIPTS=$DOT_HOME/scripts
 ENV DOT_HOME_LIB=$DOT_HOME/lib
@@ -28,7 +32,7 @@ RUN mkdir -p $TMP_SCRIPTS $TMP_CONFIG
 ADD ./scripts $TMP_SCRIPTS
 ADD ./config $TMP_CONFIG
 RUN chmod +x -R $TMP_SCRIPTS  
-RUN ln -s /usr/share/zoneinfo/US/$LOCALTIME /etc/localtime
+RUN ln -s /usr/share/zoneinfo/$LOCALTIME /etc/localtime
 
 # Installation/config script
 RUN $TMP_SCRIPTS/install-dependencies.sh

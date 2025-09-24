@@ -110,13 +110,14 @@ get_src_dependencies() {
     printf "%s\n" ""
 
     neovim_branch_version="stable"
-    python_versions=(v3.11.6 v3.12.10)
+    python_versions=(v3.11.6 v3.12.10) #EOL 2027-10 & 2028-10
 
-    jdtls_url="https://download.eclipse.org/jdtls/milestones/1.9.0/jdt-language-server-1.9.0-202203031534.tar.gz"
+    jdtls_url="https://download.eclipse.org/jdtls/milestones/${JDTLS_CURRENT_VERSION}/jdt-language-server-${JDTLS_CURRENT_VERSION}-${JDTLS_CURRENT_BUILD}.tar.gz"
     maven_url="https://dlcdn.apache.org/maven/maven-3/${MAVEN_CURRENT_VERSION}/binaries/apache-maven-${MAVEN_CURRENT_VERSION}-bin.tar.gz"
     lombok_url="https://projectlombok.org/downloads/lombok.jar"
     neovim_url="https://github.com/neovim/neovim.git"
     python_url="https://github.com/python/cpython.git"
+    awscli_url="https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip"
     urls=("$jdtls_url" "$maven_url" "$lombok_url" "$neovim_url" "$python_url")
     for url in "${urls[@]}"
     do
@@ -159,7 +160,7 @@ get_src_dependencies() {
     git clone --depth=1 $neovim_url --branch $neovim_branch_version --single-branch /tmp/neovim
 
     # jdtls
-    curl -L -o /tmp/jdtls.tar.gz $jdtls_url 
+    curl -L -o /tmp/jdtls.tar.gz "$jdtls_url"
     tar -xvzf /tmp/jdtls.tar.gz -C "$DOT_HOME_LIB"/jdtls
 
     # maven
@@ -167,15 +168,36 @@ get_src_dependencies() {
     tar -xvzf /tmp/maven.tar.gz -C "$DOT_HOME_LIB"/maven
 
     # Lombok
-    curl -L -o /tmp/lombok.jar  $lombok_url
+    curl -L -o /tmp/lombok.jar "$lombok_url"
     cp /tmp/lombok.jar "$DOT_HOME_LIB"/lombok.jar
 
+    # awscli
+    curl -L -o /tmp/awscliv2.zip "$awscli_url"
+    unzip /tmp/awscliv2.zip -d /tmp
+    # shellcheck source=/dev/null
+    . /tmp/aws/install
+    aws configure set cli_pager ""
 
     #NeoVim
     git clone --depth=1 $neovim_url --branch $neovim_branch_version --single-branch /tmp/neovim
     cd /tmp/neovim || { echo "${color_red}ERROR${color_normal}: Could not cd into /tmp/neovim"; exit 1; }
     make CMAKE_BUILD_TYPE=Release
     make install
+
+    #Removal
+    for python_version in "${python_versions[@]}"
+    do
+        
+        location="/tmp/python-${python_version}"
+        rm -rf location
+
+    done
+    rm /tmp/jdtls.tar.gz
+    rm /tmp/maven.tar.gz
+    rm /tmp/lombok.jar
+    rm /tmp/awscliv2.zip
+    rm -r /tmp/aws
+    rm -rf /tmp/neovim
 
 }
 
