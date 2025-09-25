@@ -173,9 +173,9 @@ get_src_dependencies() {
 
     # awscli
     curl -L -o /tmp/awscliv2.zip "$awscli_url"
-    unzip /tmp/awscliv2.zip -d /tmp
+    unzip /tmp/awscliv2.zip -d /tmp/
     # shellcheck source=/dev/null
-    . /tmp/aws/install
+    sudo /tmp/aws/install
     aws configure set cli_pager ""
 
     #NeoVim
