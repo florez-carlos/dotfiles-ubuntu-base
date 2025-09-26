@@ -102,7 +102,7 @@ make build REGISTRY=do-not-push
 ### Execute the local image
 
 ```bash
-make run && make exec
+make run -e REGISTRY=do-not-push && make exec
 ```
 
 ---

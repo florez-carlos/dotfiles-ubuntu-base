@@ -33,6 +33,9 @@ ADD ./scripts $TMP_SCRIPTS
 ADD ./config $TMP_CONFIG
 RUN chmod +x -R $TMP_SCRIPTS  
 RUN ln -s /usr/share/zoneinfo/$LOCALTIME /etc/localtime
+# 24.04 introduced a new ubuntu (1000) user
+RUN groupmod -g 1099 ubuntu
+RUN usermod -u 1099 ubuntu
 
 # Installation/config script
 RUN $TMP_SCRIPTS/install-dependencies.sh
