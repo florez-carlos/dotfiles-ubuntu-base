@@ -4,7 +4,7 @@ color_red=$(tput setaf 1)
 color_green=$(tput setaf 2)
 # color_yellow=$(tput setaf 3)
 color_normal=$(tput sgr0)
-arch=$(uname -m)
+arch=$(dpkg --print-architecture)
 
 #Some dependencies require trusted keys
 add_trusted_keys() {
@@ -118,7 +118,7 @@ get_src_dependencies() {
     neovim_url="https://github.com/neovim/neovim.git"
     python_url="https://github.com/python/cpython.git"
     case "$arch" in
-    x86_64)
+    x86_64|amd64)
         awscli_url="https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip"
         ;;
     aarch64|arm64)
