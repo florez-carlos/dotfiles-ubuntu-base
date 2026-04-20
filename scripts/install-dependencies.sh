@@ -4,6 +4,7 @@ color_red=$(tput setaf 1)
 color_green=$(tput setaf 2)
 # color_yellow=$(tput setaf 3)
 color_normal=$(tput sgr0)
+arch=$(uname -m)
 
 #Some dependencies require trusted keys
 add_trusted_keys() {
@@ -15,7 +16,6 @@ add_trusted_keys() {
 
     apt-get install gpg curl wget -y
 
-    arch=$(dpkg --print-architecture)
     #os_name=$(. /etc/os-release && echo "$ID") 
     #shellcheck source=/dev/null
     os_version_codename=$(. /etc/os-release && echo "$VERSION_CODENAME")
@@ -117,7 +117,19 @@ get_src_dependencies() {
     lombok_url="https://projectlombok.org/downloads/lombok.jar"
     neovim_url="https://github.com/neovim/neovim.git"
     python_url="https://github.com/python/cpython.git"
-    awscli_url="https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip"
+    case "$arch" in
+    x86_64)
+        awscli_url="https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip"
+        ;;
+    aarch64|arm64)
+        awscli_url="https://awscli.amazonaws.com/awscli-exe-linux-aarch64.zip"
+        ;;
+    *)
+
+        printf "%s\n" "${color_red}ERROR${color_normal}: Unsupported architecture: ${arch}"
+        exit 1
+        ;;
+    esac
     urls=("$jdtls_url" "$maven_url" "$lombok_url" "$neovim_url" "$python_url")
     for url in "${urls[@]}"
     do
