@@ -4,7 +4,9 @@ color_red=$(tput setaf 1)
 color_green=$(tput setaf 2)
 # color_yellow=$(tput setaf 3)
 color_normal=$(tput sgr0)
+
 arch=$(dpkg --print-architecture)
+python_versions=(v3.11.6 v3.12.10) #EOL 2027-10 & 2028-10
 
 #Some dependencies require trusted keys
 add_trusted_keys() {
@@ -110,7 +112,6 @@ get_src_dependencies() {
     printf "%s\n" ""
 
     neovim_branch_version="stable"
-    python_versions=(v3.11.6 v3.12.10) #EOL 2027-10 & 2028-10
 
     jdtls_url="https://download.eclipse.org/jdtls/milestones/${JDTLS_CURRENT_VERSION}/jdt-language-server-${JDTLS_CURRENT_VERSION}-${JDTLS_CURRENT_BUILD}.tar.gz"
     maven_url="https://dlcdn.apache.org/maven/maven-3/${MAVEN_CURRENT_VERSION}/binaries/apache-maven-${MAVEN_CURRENT_VERSION}-bin.tar.gz"

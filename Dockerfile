@@ -1,8 +1,12 @@
 FROM ubuntu:noble-20250910
 LABEL org.opencontainers.image.authors="carlos@florez.co.uk"
+LABEL org.opencontainers.image.version="2.6.0"
 
 ARG LOCALTIME=UTC
 ARG DEBIAN_FRONTEND=noninteractive
+
+# Maven needs to be bumped up on any new release, see install-dependencies.sh for url
+# To change python versions, see install-dependencies.sh
 ARG MAVEN_CURRENT_VERSION=3.9.15
 ARG JDTLS_CURRENT_VERSION=1.50.0
 ARG JDTLS_CURRENT_BUILD=202509041425
