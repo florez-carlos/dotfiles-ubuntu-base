@@ -55,4 +55,4 @@ These dependencies must be updated on any new release
 ---
 
 ## License
-[agpl-3](https://choosealicense.com/licenses/agpl-3.0/)
+[GNU AGPLv3](https://github.com/florez-carlos/dotfiles-ubuntu-base/blob/main/LICENSE)
