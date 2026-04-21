@@ -33,6 +33,7 @@ jobs:
           tags: |
             ghcr.io/${{ github.actor }}/dev-env-ubuntu-base-img:${{ github.event.release.tag_name }}
             ghcr.io/${{ github.actor }}/dev-env-ubuntu-base-img:latest
+          provenance: false # Disable provenance to avoid unknown/unknown
 
   # Job for AMD64 build
   build-amd64:
@@ -62,3 +63,4 @@ jobs:
           tags: |
             ghcr.io/${{ github.actor }}/dev-env-ubuntu-base-img:${{ github.event.release.tag_name }}
             ghcr.io/${{ github.actor }}/dev-env-ubuntu-base-img:latest
+          provenance: false # Disable provenance to avoid unknown/unknown
