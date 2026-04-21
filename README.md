@@ -55,4 +55,4 @@ These dependencies must be updated on any new release
 ---
 
 ## License
-[GNU AGPLv3](https://github.com/florez-carlos/dotfiles-ubuntu-base/blob/main/LICENSE)
+[GNU GPLv3](https://github.com/florez-carlos/dotfiles-ubuntu-base/blob/main/LICENSE)
