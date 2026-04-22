@@ -214,6 +214,21 @@ get_src_dependencies() {
 
 }
 
+get_pip_dependencies() {
+
+    read -ra PYTHON_VERSIONS <<< "${PYTHON_VERSIONS}"
+
+    for version in "${PYTHON_VERSIONS[@]}"; do
+        minor="${version%.*}"  # strips patch: 3.11.6 -> 3.11
+        /usr/local/bin/python"${minor}" -m pip install --upgrade pip
+        /usr/local/bin/python"${minor}" -m pip install setuptools wheel pynvim ruff build twine
+    done
+
+    ln -sf /usr/local/bin/python"${PYTHON_DEFAULT}" /usr/local/bin/python
+    ln -sf /usr/local/bin/pip"${PYTHON_DEFAULT}" /usr/local/bin/pip
+    
+}
+
 set_locale() {
 
     printf "%s\n" ""
@@ -238,6 +253,7 @@ update
 get_apt_dependencies
 set_locale
 get_src_dependencies
+get_pip_dependencies
 printf "%s\n" ""
 printf "%s\n" "${color_green}SUCCESS${color_normal}: Installation complete!"
 printf "%s\n" ""

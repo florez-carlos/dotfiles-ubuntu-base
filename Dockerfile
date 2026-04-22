@@ -1,15 +1,16 @@
 FROM ubuntu:noble-20250910
 LABEL org.opencontainers.image.authors="carlos@florez.co.uk"
-LABEL org.opencontainers.image.version="2.6.0"
+LABEL org.opencontainers.image.version="2.6.1"
 
 ARG LOCALTIME=UTC
 ARG DEBIAN_FRONTEND=noninteractive
 
 # Maven needs to be bumped up on any new release, see install-dependencies.sh for url
-# To change python versions, see install-dependencies.sh
 ARG MAVEN_CURRENT_VERSION=3.9.15
 ARG JDTLS_CURRENT_VERSION=1.50.0
 ARG JDTLS_CURRENT_BUILD=202509041425
+ARG PYTHON_VERSIONS="3.11.6 3.12.10"
+ARG PYTHON_DEFAULT=3.12
 
 ENV TMP_SCRIPTS=/tmp/scripts
 ENV TMP_CONFIG=/tmp/config
@@ -21,6 +22,8 @@ ENV LOCALTIME=$LOCALTIME
 ENV MAVEN_CURRENT_VERSION=$MAVEN_CURRENT_VERSION
 ENV JDTLS_CURRENT_VERSION=$JDTLS_CURRENT_VERSION
 ENV JDTLS_CURRENT_BUILD=$JDTLS_CURRENT_BUILD
+ENV PYTHON_VERSIONS=$PYTHON_VERSIONS
+ENV PYTHON_DEFAULT=$PYTHON_DEFAULT
 ENV DOT_HOME=/usr/local/src/dotfiles
 ENV DOT_HOME_SCRIPTS=$DOT_HOME/scripts
 ENV DOT_HOME_LIB=$DOT_HOME/lib
