@@ -23,6 +23,7 @@ jobs:
           context: .
           push: true
           platforms: linux/arm64
+          provenance: false
           tags: |
             ghcr.io/${{ github.actor }}/dev-env-ubuntu-base-img:${{ github.event.release.tag_name }}-arm64
 
@@ -46,6 +47,7 @@ jobs:
           context: .
           push: true
           platforms: linux/amd64
+          provenance: false
           tags: |
             ghcr.io/${{ github.actor }}/dev-env-ubuntu-base-img:${{ github.event.release.tag_name }}-amd64
 
@@ -62,6 +64,7 @@ jobs:
       - name: Create and push multi-arch manifest
         run: |
           docker buildx imagetools create \
+            -t ghcr.io/${{ github.actor }}/dev-env-ubuntu-base-img:${{ github.event.release.tag_name }} \
             -t ghcr.io/${{ github.actor }}/dev-env-ubuntu-base-img:latest \
             ghcr.io/${{ github.actor }}/dev-env-ubuntu-base-img:${{ github.event.release.tag_name }}-arm64 \
             ghcr.io/${{ github.actor }}/dev-env-ubuntu-base-img:${{ github.event.release.tag_name }}-amd64
