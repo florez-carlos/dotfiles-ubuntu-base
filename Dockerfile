@@ -1,6 +1,6 @@
 FROM ubuntu:noble-20250910
 LABEL org.opencontainers.image.authors="carlos@florez.co.uk"
-LABEL org.opencontainers.image.version="2.6.1"
+LABEL org.opencontainers.image.version="2.6.2"
 
 ARG LOCALTIME=UTC
 ARG DEBIAN_FRONTEND=noninteractive
