@@ -168,9 +168,7 @@ get_src_dependencies() {
     done
 
     # Remove symlink from installed python to preserve link to system python /usr/bin/python3
-    rm /usr/local/bin/python3
-
-    git clone --depth=1 $neovim_url --branch $neovim_branch_version --single-branch /tmp/neovim
+    rm -f /usr/local/bin/python3
 
     # jdtls
     curl -L -o /tmp/jdtls.tar.gz "$jdtls_url"
@@ -198,6 +196,7 @@ get_src_dependencies() {
     make install
 
     #Removal
+	cd / || exit 1
     for python_version in "${python_versions[@]}"
     do
         
