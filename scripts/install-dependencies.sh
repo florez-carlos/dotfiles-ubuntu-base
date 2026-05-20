@@ -54,7 +54,7 @@ update() {
     printf "%s\n" ""
     sleep 1
     apt-get update -y 
-    apt-get upgrade -y 
+    apt-get upgrade -y --fix-missing
     if ! yes Y | unminimize
     then
         printf "%s\n" "${color_red}ERROR${color_normal}: An error has occurred updating, halting..."
