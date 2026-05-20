@@ -24,6 +24,7 @@ jobs:
           push: true
           platforms: linux/arm64
           provenance: false
+          no-cache: true
           tags: |
             ghcr.io/${{ github.actor }}/dev-env-ubuntu-base-img:${{ github.event.release.tag_name }}-arm64
 
@@ -48,6 +49,7 @@ jobs:
           push: true
           platforms: linux/amd64
           provenance: false
+          no-cache: true
           tags: |
             ghcr.io/${{ github.actor }}/dev-env-ubuntu-base-img:${{ github.event.release.tag_name }}-amd64
 
