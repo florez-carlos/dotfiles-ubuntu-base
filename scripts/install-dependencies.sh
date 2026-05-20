@@ -220,7 +220,7 @@ get_pip_dependencies() {
     for version in "${PYTHON_VERSIONS[@]}"; do
         minor="${version%.*}"  # strips patch: 3.11.6 -> 3.11
         /usr/local/bin/python"${minor}" -m pip install --upgrade pip
-        /usr/local/bin/python"${minor}" -m pip install setuptools wheel pynvim ruff build twine
+        /usr/local/bin/python"${minor}" -m pip install setuptools wheel pynvim ruff build twine vermin
     done
 
     ln -sf /usr/local/bin/python"${PYTHON_DEFAULT}" /usr/local/bin/python
