@@ -6,7 +6,7 @@ color_green=$(tput setaf 2)
 color_normal=$(tput sgr0)
 
 arch=$(dpkg --print-architecture)
-python_versions=(v3.11.6 v3.12.10) #EOL 2027-10 & 2028-10
+read -ra PYTHON_VERSIONS <<< "${PYTHON_VERSIONS}"
 
 #Some dependencies require trusted keys
 add_trusted_keys() {
@@ -151,8 +151,7 @@ get_src_dependencies() {
     printf "%s\n" ""
 
 
-    for python_version in "${python_versions[@]}"
-    do
+    for python_version in "${PYTHON_VERSIONS[@]}"; do
         printf "%s\n" ""
         printf "%s\n" " -> Beginning python${python_version} install: "
         printf "%s\n" ""
@@ -197,13 +196,11 @@ get_src_dependencies() {
 
     #Removal
 	cd / || exit 1
-    for python_version in "${python_versions[@]}"
-    do
-        
-        location="/tmp/python-${python_version}"
-        rm -rf location
 
+    for version in "${PYTHON_VERSIONS[@]}"; do
+        rm -rf "/tmp/python-${version}"
     done
+    
     rm /tmp/jdtls.tar.gz
     rm /tmp/maven.tar.gz
     rm /tmp/lombok.jar
@@ -215,9 +212,8 @@ get_src_dependencies() {
 
 get_pip_dependencies() {
 
-    read -ra PYTHON_VERSIONS <<< "${PYTHON_VERSIONS}"
-
-    for version in "${PYTHON_VERSIONS[@]}"; do
+    for python_version in "${PYTHON_VERSIONS[@]}"; do
+        version="${python_version#v}" # strip leading 'v' if present
         minor="${version%.*}"  # strips patch: 3.11.6 -> 3.11
         /usr/local/bin/python"${minor}" -m pip install --upgrade pip
         /usr/local/bin/python"${minor}" -m pip install setuptools wheel pynvim ruff build twine vermin

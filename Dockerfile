@@ -1,16 +1,16 @@
 FROM ubuntu:noble-20250910
-LABEL org.opencontainers.image.authors="carlos@florez.co.uk"
-LABEL org.opencontainers.image.version="2.6.3"
+LABEL org.opencontainers.image.authors="mail@florezcarlos.com"
+LABEL org.opencontainers.image.version="2.7.0"
 
 ARG LOCALTIME=UTC
 ARG DEBIAN_FRONTEND=noninteractive
 
 # Maven needs to be bumped up on any new release, see install-dependencies.sh for url
-ARG MAVEN_CURRENT_VERSION=3.9.16
-ARG JDTLS_CURRENT_VERSION=1.50.0
-ARG JDTLS_CURRENT_BUILD=202509041425
-ARG PYTHON_VERSIONS="3.11.6 3.12.10"
-ARG PYTHON_DEFAULT=3.12
+ARG MAVEN_CURRENT_VERSION=3.10.0
+ARG JDTLS_CURRENT_VERSION=1.63.0
+ARG JDTLS_CURRENT_BUILD=202610191322
+ARG PYTHON_VERSIONS="v3.12.15 v3.13.17"
+ARG PYTHON_DEFAULT=3.13
 
 ENV TMP_SCRIPTS=/tmp/scripts
 ENV TMP_CONFIG=/tmp/config

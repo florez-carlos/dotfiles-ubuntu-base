@@ -50,7 +50,7 @@ This will setup shellcheck for scripts and commit message verification
 These dependencies must be updated on any new release
 - Maven (Dockerfile)
 - JDTLS (Dockerfile)
-- Python (install-dependencies.sh) - Optional
+- Python (Dockerfile) - Optional
 
 ---
 
