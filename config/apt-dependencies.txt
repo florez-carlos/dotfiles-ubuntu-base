@@ -54,3 +54,4 @@ zlib1g-dev=0
 azure-cli=2.1.0
 mongodb-mongosh=0
 postgresql=0
+luarocks=0
