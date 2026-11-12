@@ -49,3 +49,7 @@ luarocks=0
 openssh-client=0
 less=0
 tzdata=0
+gdu=0
+btm=0
+lazygit=0
+fd-find=0
