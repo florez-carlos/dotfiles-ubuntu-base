@@ -13,7 +13,6 @@ not need to modify the system level dependencies then proceed with this repo:
   * [Clone Repo](#clone-repo)
   * [Update submodules](#update-submodules)
   * [Install Git Hooks](#install-git-hooks) 
-  * [Update Dependencies](#update-dependencies) 
 
 ## Development
 > [!NOTE]
@@ -44,13 +43,6 @@ This will setup shellcheck for scripts and commit message verification
 ```bash
 ./init-hooks.sh
 ```
-
-### Update Dependencies
-
-These dependencies must be updated on any new release
-- Maven (Dockerfile)
-- JDTLS (Dockerfile)
-- Python (Dockerfile) - Optional
 
 ---
 
