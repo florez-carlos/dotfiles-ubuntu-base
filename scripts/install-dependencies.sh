@@ -8,44 +8,6 @@ color_normal=$(tput sgr0)
 arch=$(dpkg --print-architecture)
 read -ra PYTHON_VERSIONS <<< "${PYTHON_VERSIONS}"
 
-#Some dependencies require trusted keys
-add_trusted_keys() {
-
-    printf "%s\n" ""
-    printf "%s\n" " -> Beginning Add Azure cli trusted key: "
-    printf "%s\n" ""
-    sleep 1
-
-    apt-get install gpg curl wget -y
-
-    #os_name=$(. /etc/os-release && echo "$ID") 
-    #shellcheck source=/dev/null
-    os_version_codename=$(. /etc/os-release && echo "$VERSION_CODENAME")
-    mkdir -p /etc/apt/keyrings
-    chmod 755 /etc/apt/keyrings
-
-    curl -sLS https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor -o /etc/apt/keyrings/microsoft.gpg
-    # chmod go+r /etc/apt/keyrings/microsoft.gpg
-    wget -qO- https://www.mongodb.org/static/pgp/server-7.0.asc | tee /etc/apt/trusted.gpg.d/server-7.0.asc
-
-    echo "Types: deb
-URIs: https://packages.microsoft.com/repos/azure-cli/
-Suites: ${os_version_codename}
-Components: main
-Architectures: ${arch}
-Signed-by: /etc/apt/keyrings/microsoft.gpg" | \
-    tee /etc/apt/sources.list.d/azure-cli.sources
-
-
-    printf "%s\n" ""
-    printf "%s\n" " -> Beginning Add Mongo shell trusted key: "
-    printf "%s\n" ""
-    sleep 1
-    
-    # wget -qO- https://www.mongodb.org/static/pgp/server-7.0.asc | tee /etc/apt/trusted.gpg.d/server-7.0.asc
-    echo "deb [ arch=amd64,arm64 ] https://repo.mongodb.org/apt/ubuntu focal/mongodb-org/7.0 multiverse" | tee /etc/apt/sources.list.d/mongodb-org-7.0.list
-    
-}
 
 update() {
 
@@ -71,15 +33,15 @@ get_apt_dependencies() {
     printf "%s\n" " -> Beginning APT Dependency Download: "
     printf "%s\n" ""
 
-    #min_version is not used here
-    while IFS='=' read -r dependency min_version
-    do
-        
-        printf "%s" " -> Installing $dependency: "
-        
-        apt-get install "$dependency" -y 
-        
-    done < "$dependencies_file"
+    mapfile -t pkgs < <(cut -d= -f1 "$dependencies_file" | sort -u)
+
+    printf " -> Installing %d packages\n" "${#pkgs[@]}"
+    apt-get install -y "${pkgs[@]}"
+    if ! apt-get install -y "${pkgs[@]}"
+    then
+        printf "%s\n" "${color_red}ERROR${color_normal}: APT dependency installation failed, halting..."
+        exit 1
+    fi
 
     printf "%s\n" ""
     printf "%s\n" " -> Beginning APT Dependency check: "
@@ -88,7 +50,6 @@ get_apt_dependencies() {
     do
 
         installed_version="$(dpkg -s "$dependency" | grep '^Version:' | cut -d' ' -f2)"
-        dpkg --compare-versions "$installed_version" gt "$min_version"
 
         if ! dpkg --compare-versions "$installed_version" gt "$min_version"
         then
@@ -112,10 +73,6 @@ get_src_dependencies() {
     printf "%s\n" ""
 
     neovim_branch_version="stable"
-
-    jdtls_url="https://download.eclipse.org/jdtls/milestones/${JDTLS_CURRENT_VERSION}/jdt-language-server-${JDTLS_CURRENT_VERSION}-${JDTLS_CURRENT_BUILD}.tar.gz"
-    maven_url="https://dlcdn.apache.org/maven/maven-3/${MAVEN_CURRENT_VERSION}/binaries/apache-maven-${MAVEN_CURRENT_VERSION}-bin.tar.gz"
-    lombok_url="https://projectlombok.org/downloads/lombok.jar"
     neovim_url="https://github.com/neovim/neovim.git"
     python_url="https://github.com/python/cpython.git"
     case "$arch" in
@@ -131,7 +88,7 @@ get_src_dependencies() {
         exit 1
         ;;
     esac
-    urls=("$jdtls_url" "$maven_url" "$lombok_url" "$neovim_url" "$python_url")
+    urls=("$neovim_url" "$python_url")
     for url in "${urls[@]}"
     do
 	response="$(curl --head --silent --location --write-out "%{http_code}" --output /dev/null "$url")";
@@ -169,18 +126,6 @@ get_src_dependencies() {
     # Remove symlink from installed python to preserve link to system python /usr/bin/python3
     rm -f /usr/local/bin/python3
 
-    # jdtls
-    curl -L -o /tmp/jdtls.tar.gz "$jdtls_url"
-    tar -xvzf /tmp/jdtls.tar.gz -C "$DOT_HOME_LIB"/jdtls
-
-    # maven
-    curl -L -o /tmp/maven.tar.gz "$maven_url"
-    tar -xvzf /tmp/maven.tar.gz -C "$DOT_HOME_LIB"/maven
-
-    # Lombok
-    curl -L -o /tmp/lombok.jar "$lombok_url"
-    cp /tmp/lombok.jar "$DOT_HOME_LIB"/lombok.jar
-
     # awscli
     curl -L -o /tmp/awscliv2.zip "$awscli_url"
     unzip /tmp/awscliv2.zip -d /tmp/
@@ -201,9 +146,6 @@ get_src_dependencies() {
         rm -rf "/tmp/python-${version}"
     done
     
-    rm /tmp/jdtls.tar.gz
-    rm /tmp/maven.tar.gz
-    rm /tmp/lombok.jar
     rm /tmp/awscliv2.zip
     rm -r /tmp/aws
     rm -rf /tmp/neovim
@@ -215,8 +157,8 @@ get_pip_dependencies() {
     for python_version in "${PYTHON_VERSIONS[@]}"; do
         version="${python_version#v}" # strip leading 'v' if present
         minor="${version%.*}"  # strips patch: 3.11.6 -> 3.11
-        /usr/local/bin/python"${minor}" -m pip install --upgrade pip
-        /usr/local/bin/python"${minor}" -m pip install setuptools wheel pynvim ruff build twine vermin
+        /usr/local/bin/python"${minor}" -m pip install --no-cache-dir --upgrade pip
+        /usr/local/bin/python"${minor}" -m pip install --no-cache-dir setuptools wheel pynvim ruff build twine vermin
     done
 
     ln -sf /usr/local/bin/python"${PYTHON_DEFAULT}" /usr/local/bin/python
@@ -242,8 +184,6 @@ if [[ $UID != 0 ]]; then
     exit 1
 fi
 
-update
-add_trusted_keys
 update
 get_apt_dependencies
 set_locale
