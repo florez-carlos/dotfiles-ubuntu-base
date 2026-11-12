@@ -14,9 +14,10 @@ update() {
     printf "%s\n" ""
     printf "%s\n" " -> Beginning update: "
     printf "%s\n" ""
-    sleep 1
-    apt-get update -y 
-    apt-get upgrade -y --fix-missing
+    apt update -y 
+    apt upgrade -y --fix-missing
+    apt install -y unminimize man-db
+
     if ! yes Y | unminimize
     then
         printf "%s\n" "${color_red}ERROR${color_normal}: An error has occurred updating, halting..."
@@ -36,8 +37,8 @@ get_apt_dependencies() {
     mapfile -t pkgs < <(cut -d= -f1 "$dependencies_file" | sort -u)
 
     printf " -> Installing %d packages\n" "${#pkgs[@]}"
-    apt-get install -y "${pkgs[@]}"
-    if ! apt-get install -y "${pkgs[@]}"
+    apt install -y "${pkgs[@]}"
+    if ! apt install -y "${pkgs[@]}"
     then
         printf "%s\n" "${color_red}ERROR${color_normal}: APT dependency installation failed, halting..."
         exit 1

@@ -53,5 +53,3 @@ gdu=0
 btm=0
 lazygit=0
 fd-find=0
-unminimize=0
-man-db=0
